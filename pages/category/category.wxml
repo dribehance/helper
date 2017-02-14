@@ -1,0 +1,25 @@
+
+<!--pages/category/category.wxml-->
+
+<!--category list-->
+<view class="flex-box full-height">
+  <!--left scrollview-->
+  <scroll-view scroll-y="true" class="fi-b180 full-height bg-default">
+    <view class="flex-box flex-box-column flex-box-start">
+      <view class="fi-b100 flex-box flex-box-center text-center full-width scroll-item {{currentCategory.id == item.id?'scroll-item-active':''}}" wx:for="{{catalogs}}" wx:key="{{id}}" data-category="{{item}}" bindtap="selectCategory">{{item.name}}</view>
+    </view>
+    
+  </scroll-view>
+  <!--right scrollview-->
+  <scroll-view scroll-y="true"  class="flex-item full-height">
+    <view class="grid category-list">
+      <navigator url="/pages/products/products?id={{item.id}}" class="category-list-item grid-cell gc-1of3 text-center" wx:for="{{currentCategory.subcatalog}}" wx:key="{{id}}">
+        <image class="icon icon-category" src="{{item.cover}}" mode="aspectFit"></image>
+        <text class="block">{{item.name}}</text>
+      </navigator>
+    </view>
+    <view class="flex-box flex-box-center full-height" wx:if="{{currentCategory.subcatalog.length == 0}}">暂无分类</view>
+  </scroll-view>
+</view>
+
+<!--category list end-->

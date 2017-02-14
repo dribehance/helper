@@ -1,0 +1,2 @@
+/* pages/product/product.wxss */
+@import "../../wxParse/wxParse.wxss";

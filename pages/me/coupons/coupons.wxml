@@ -1,0 +1,16 @@
+<!-- pages/me/coupons/coupons.wxml -->
+<view class="justified section">
+    <!-- coupons list -->
+    <view class="justified-cell jc-1of2 coupon" wx:for="{{coupons}}"wx:key>
+        <view class="coupon-header">
+            <view class="inline text-big price bold">{{item.price}}</view>
+            <view class="inline text-small">{{item.summary}}</view>
+            <view class="flex-box flex-box-between">
+                <view class="text-light text-small bold">{{item.message}}</view>
+                <view class="text-light text-small bold">{{item.expired_time}}</view>
+            </view>
+        </view>
+        <view class="coupon-footer text-overflow">{{item.name}}</view>
+    </view>
+    <!-- coupons list end -->
+</view>

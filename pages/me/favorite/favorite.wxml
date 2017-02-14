@@ -1,0 +1,16 @@
+<!--pages/me/favorite/favorite.wxml-->
+<!--products list-->
+<view class="product-list">
+  <navigator url="/pages/product/product" class="flex-box flex-box-center product-item">
+    <view class="fi-1of4 full-height">
+      <image src="/images/example.png" mode="aspectFit" class="full-width full-height"></image>
+    </view>
+    <view class="flex-item product-content">
+      <view class="product-name">装上衣七匹狼夹克男士外套拨款修身商务休闲春装上衣</view>
+      <view class="text-primary bold inline text-big">29.50</view>
+      <view class="text-primary text-small inline text-through"> 29.5</view>
+    </view>
+  </navigator>
+</view>
+
+<!--products list end-->

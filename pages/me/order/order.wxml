@@ -1,0 +1,49 @@
+<!--pages/me/order/order.wxml-->
+<view class="list-group">
+    <view class="list-group-header flex-box text-small bg-light">
+        <view class="flex-item">订单编号 77777777</view>
+    </view>
+    <view class="list-group-item-text flex-box flex-box-center">
+        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
+              data-index="{{index}}">
+            <view class="fi-1of4 full-height">
+                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+            </view>
+            <view class="flex-item flex-box flex-box-column">
+                <view class="flex-item product-name">{{item.name}}</view>
+                <view class="text-light">{{item.color}}</view>
+                <view class="flex-item flex-box flex-box-center flex-box-between full-width">
+                    <view class="flex-item text-primary">{{item.price}}</view>
+                </view>
+            </view>
+        </view>
+        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
+              data-index="{{index}}">
+            <view class="fi-1of4 full-height">
+                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+            </view>
+            <view class="flex-item flex-box flex-box-column">
+                <view class="flex-item product-name">{{item.name}}</view>
+                <view class="text-light">{{item.color}}</view>
+                <view class="flex-item flex-box flex-box-center flex-box-between full-width">
+                    <view class="flex-item text-primary">{{item.price}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="list-group">
+    <view class="list-group-item">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/location.png"></image>
+        <view class="list-group-item-text flex-box flex-box-column">
+            <view class="bold text-big">梁渝铭 185*****4021</view>
+            <view>广东省深圳市宝安区名优采购中心工业产业园</view>
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="text-big bold">发票</view>
+        <view class="list-group-item-text section">
+            <view>深圳夸克时代在线技术有限公司</view>
+        </view>
+    </view>
+</view>

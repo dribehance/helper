@@ -1,0 +1,75 @@
+<!-- pages/payment/payment.wxml -->
+<view class="list-group">
+    <navigator url="/pages/me/address/address?redirect" class="list-group-item">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/location.png"></image>
+        <view class="list-group-item-text flex-box flex-box-column">
+            <view class="bold text-big">梁渝铭 185*****4021</view>
+            <view>广东省深圳市宝安区名优采购中心工业产业园</view>
+        </view>
+        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+    </navigator>
+</view>
+<view class="flex-box flex-box-center product-item">
+    <view class="fi-1of4 full-height">
+        <image src="/images/example.png" mode="aspectFit" class="full-width full-height"></image>
+    </view>
+    <view class="flex-item product-content">
+        <view class="product-name">装上衣七匹狼夹克男士外套拨款修身商务休闲春装上衣</view>
+        <view class="text-primary bold inline text-big">29.50</view>
+        <view class="text-primary text-small inline text-through">29.5</view>
+    </view>
+</view>
+<view style="height:24rpx"></view>
+<view class="list-group">
+    <navigator url="/pages/payment/fapiao/fapiao" class="list-group-item">
+        <view class="list-group-item-text">
+            <view>发票信息</view>
+        </view>
+        <view>不开发票</view>
+        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+    </navigator>
+    <navigator url="/pages/me/coupons/coupons" class="list-group-item">
+        <view class="list-group-item-text">
+            <view>优惠券</view>
+        </view>
+        <view>选择优惠券</view>
+        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+    </navigator>
+</view>
+<view class="list-group">
+    <view class="list-group-item">
+        <view class="list-group-item-text">
+            <input type="text" placeholder="给卖家留言" />
+        </view>
+    </view>
+</view>
+<view class="list-group">
+    <view class="list-group-item">
+        <view class="list-group-item-text">
+            商品金额
+        </view>
+        <view class="text-primary">
+            18914.00
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="list-group-item-text">
+            优惠券
+        </view>
+        <view class="text-primary">
+            18914.00
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="list-group-item-text">
+            运费
+        </view>
+        <view class="text-primary">
+            18914.00
+        </view>
+    </view>
+</view>
+<view style="height:110px"></view>
+<view class="payment-footer flex-box flex-box-center">
+     微信支付
+</view>

@@ -1,0 +1,3 @@
+@import "/wxss/common/common.wxss";
+@import "/wxss/icon.wxss";
+@import "/wxss/main.wxss";

@@ -1,0 +1,57 @@
+<!-- pages/category/filter/filter.wxml -->
+<view class="list-group">
+    <view class="list-group-item flex-box flex-box-column">
+        <view class="flex-item full-width margin-b12 bold">价格区间</view>
+        <view class="flex-item flex-box flex-box-center">
+            <view class="flex-item">
+                <input type="digit" placeholder="最低价格" focus class="input full-width text-center bg-light"  />
+            </view>
+            <view class="fi-b88 text-center">-</view>
+            <view class="flex-item">
+                <input type="digit" placeholder="最高价格" class="input full-width text-center bg-light"  />
+            </view>
+        </view>
+    </view>
+</view>
+<view class="list-group">
+    <view class="list-group-item">
+        <view class="list-group-item-text bold">
+            分类
+        </view>
+        <view class="text-light">
+            全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small"></image>
+        </view>
+    </view>
+    <view class="list-group-item flex-box">
+        <view class="size-btn bg-default">category</view>
+        <view class="size-btn bg-default">category</view>
+        <view class="size-btn bg-default">category</view>
+        <view class="size-btn bg-default">category</view>
+        <view class="size-btn bg-default">category</view>
+    </view>
+</view>
+<view class="list-group">
+    <view class="list-group-item">
+        <view class="list-group-item-text bold">
+            品牌
+        </view>
+        <view class="text-light">
+            全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small"></image>
+        </view>
+    </view>
+    <view class="list-group-item flex-box">
+        <view class="size-btn bg-default">brand</view>
+        <view class="size-btn bg-default">brand</view>
+        <view class="size-btn bg-default">brandbrand</view>
+        <view class="size-btn bg-default">brand</view>
+        <view class="size-btn bg-default">brand</view>
+    </view>
+</view>
+<view class="filter-footer flex-box flex-box-center bg-white">
+    <view class="flex-item flex-box flex-box-center text-center full-height bg-light">
+        重置
+    </view>
+    <view class="flex-item flex-box flex-box-center text-center full-height text-primary">
+        确认
+    </view>
+</view>

@@ -1,0 +1,12 @@
+
+<!--pages/category/sub_category/sub_category.wxml-->
+
+<!--category list-->
+<view class="grid category-list">
+  <view class="category-list-item grid-cell gc-1of3 text-center" data-type="{{item.type}}" catchtap="selected_category" wx:for="{{categorys}}" wx:key>
+    <image class="icon icon-category" src="{{item.icon}}" mode="aspectFill"></image>
+    <text class="block">{{item.name}}</text>
+  </view>
+</view>
+
+<!--category list end-->

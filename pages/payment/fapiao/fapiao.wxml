@@ -1,0 +1,31 @@
+<!--pages/payment/fapiao/fapiao.wxml-->
+<view class="list-group">
+    <view class="list-group-header text-small bg-light">
+        发票内容
+    </view>
+    <view class="list-group-item">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png"></image>
+        <view class="list-group-item-text">
+            明细
+        </view>
+    </view>
+    <view class="list-group-item">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png"></image>
+        <view class="list-group-item-text">
+            不开发票
+        </view>
+    </view>
+</view>
+<view class="list-group">
+    <view class="list-group-header text-small bg-light">
+        发票抬头
+    </view>
+    <view class="list-group-item">
+        <view class="list-group-item-text">
+            <input type="text" placeholder="发票抬头" focus class="full-width" />
+        </view>
+    </view>
+</view>
+<view class="section">
+    <button type="warn">确定</button>
+</view>

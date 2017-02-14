@@ -1,0 +1,51 @@
+<!-- pages/me/address/create_address/create_address.wxml -->
+<view class="list-group">
+    <view class="list-group-item">
+        <view class="fi-b250">收货人</view>
+        <view class="list-group-item-text flex-box" data-index="{{index}}" catchtap="check">
+            <input type="text" placeholder="请输入收货人名字"  focus  />
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="fi-b250">联系方式</view>
+        <view class="list-group-item-text flex-box" data-index="{{index}}" catchtap="check">
+            <input type="digit" placeholder="请输入收货人联系电话"  />
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="fi-b250">省份</view>
+        <view class="list-group-item-text flex-box">
+            <picker class="full-width" bindchange="onProvinceChange" value="{{p_value}}" range="{{provinces}}">
+                <view class="picker"> <text wx:if="{{!p_value}}">请选择</text> {{provinces[p_value]}}</view>
+            </picker>
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="fi-b250">城市</view>
+        <view class="list-group-item-text flex-box">
+            <picker class="full-width" bindchange="onCityChange" value="{{c_value}}" range="{{cities}}">
+                <view class="picker"> <text wx:if="{{!c_value}}">请选择</text> {{cities[c_value]}}</view>
+            </picker>
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="fi-b250">区域</view>
+        <view class="list-group-item-text flex-box">
+            <picker class="full-width" bindchange="onDistrictChange" value="{{d_value}}" range="{{districts}}">
+                <view class="picker"> <text wx:if="{{!d_value}}">请选择</text> {{districts[d_value]}}</view>
+            </picker>
+        </view>
+    </view>
+    <view class="list-group-item">
+        <view class="fi-b250">详细地址</view>
+        <view class="list-group-item-text flex-box" data-index="{{index}}" catchtap="check">
+            <input type="text" class="full-width" placeholder="请输入详细地址，具体到门牌号"  />
+        </view>
+    </view>
+    <view class="list-group-header text-small bg-light">
+        详细地址需要填写楼宇楼层或者房间号信息
+    </view>
+</view>
+<view class="section">
+    <button type="warn">添加地址</button>
+</view>

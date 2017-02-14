@@ -1,0 +1,32 @@
+/*list group*/
+.list-group {
+  margin-bottom: 24rpx;
+}
+.list-group-item {
+  display: flex;
+  min-height: 100rpx;
+  padding: 12rpx 24rpx;
+  align-items: center;
+  background-color: white;
+  border-bottom: 1rpx solid #d5d5d5;
+}
+.list-group-header {
+  display: flex;
+  min-height: 100rpx;
+  padding: 12rpx 24rpx;
+  align-items: center;
+  background-color:#d5d5d5;
+}
+.list-group-item-text {
+  flex: 1;
+}
+.list-group-item-label {
+  flex: 0 0 100rpx;
+}
+.list-group-item-image {
+  width:50rpx;
+  height: 50rpx;
+}
+.list-group-item-image:first-child {
+  margin-right: 24rpx;
+}

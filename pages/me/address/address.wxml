@@ -1,0 +1,18 @@
+<!--pages/me/address/address.wxml-->
+<view class="list-group">
+    <view class="list-group-item" wx:for="{{addresses}}" wx:key="{{}}">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{item.check}}"></image>
+        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{!item.check}}"></image>
+        <view class="list-group-item-text flex-box flex-box-column" data-index="{{index}}" catchtap="check">
+            <view class="bold text-big">{{item.name}} {{item.telephone}}</view>
+            <view>{{item.province+item.city+item.district+item.street}}</view>
+            <view class="text-primary" wx:if="{{item.check}}">默认地址</view>
+            <view wx:if="{{item.check}}" wx:if="{{!item.check}}">设为默认</view>
+        </view>
+        <navigator class="edit-btn" url="/pages/me/address/create_address/create_address" catchtap="edit">编辑</navigator>
+    </view>
+</view>
+<view style="height:100rpx;"></view>
+<navigator url="/pages/me/address/create_address/create_address" open-type="{{redirect?'redirect':'navigate'}}" class="address-footer flex-box flex-box-center bold">
+    + 新建地址
+</navigator>

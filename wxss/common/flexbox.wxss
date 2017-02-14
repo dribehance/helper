@@ -1,0 +1,56 @@
+.flex-box {
+    display: flex;
+    flex-flow: row wrap;
+}
+.flex-box-column {
+  flex-direction: column;
+}
+.flex-box-center {
+  align-items: center;
+  justify-content: center;
+}
+.flex-box-end {
+  justify-content: flex-end;
+}
+.flex-box-between {
+  justify-content: space-between;
+}
+.flex-item {
+  flex: 1;
+  overflow: hidden;
+}
+
+.fi-1of2 {
+  flex: 0 0 50%;
+  overflow: hidden;
+}
+.fi-1of3 {
+  flex: 0 0 33.33%;
+  overflow: hidden;
+}
+.fi-1of4 {
+  flex: 0 0 25%;
+  overflow: hidden;
+}
+.fi-1of5 {
+  flex: 0 0 20%;
+  overflow: hidden;
+}
+.fi-b60 {
+  flex: 0 0 60rpx;
+}
+.fi-b88 {
+  flex: 0 0 88rpx;
+}
+.fi-b100 {
+  flex: 0 0 100rpx;
+}
+.fi-b150 {
+  flex: 0 0 150rpx;
+}
+.fi-b180 {
+  flex: 0 0 180rpx;
+}
+.fi-b250 {
+  flex: 0 0 250rpx;
+}

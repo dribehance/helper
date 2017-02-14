@@ -1,0 +1,39 @@
+
+<!--pages/shoppingcart/shoppingcart.wxml-->
+<view class="shoppincart-swipe-wrap" wx:for="{{shoppingcartList}}" wx:key>
+  <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" animation="{{item.animateData}}" bindtouchmove="ontouchmove" bindtouchstart="ontouchstart" bindtouchend="ontouchend" data-touchstart="{{item.touchstartData}}" data-touchmove="{{item.touchmoveData}}" data-touchend="{{item.touchendData}}"  data-index="{{index}}">
+    <view class="fi-b60 flex-box flex-box-center full-height" catchtap="check" data-index="{{index}}">
+      <image src="/images/checked.png" mode="aspectFit" class="icon icon-big" wx:if="{{item.check}}"></image>
+      <image src="/images/check.png" mode="aspectFit" class="icon icon-big" wx:if="{{!item.check}}"></image>
+    </view>
+    <view class="fi-1of4 full-height" catchtap="check" data-index="{{index}}">
+      <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+    </view>
+    <view class="flex-item flex-box flex-box-column">
+      <view class="flex-item product-name">
+        {{item.name}}
+      </view>
+      <view class="text-light">{{item.color}}</view>
+      <view class="flex-item flex-box flex-box-center flex-box-between full-width">
+        <view class="flex-item text-primary">{{item.price}}</view>
+        <view class="control-bar">
+          <view class="control-bar-minus {{item.amount == 1 ?'disabled':''}}" data-index="{{index}}" catchtouchend="minus">-</view>
+          <view class="control-bar-text">{{item.amount}}</view>
+          <view class="control-bar-plus" data-index="{{index}}" catchtouchend="plus">+</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!--delete btn-->
+  <view class="delete-btn">删除</view>
+</view>
+<view style="height:90rpx"></view>
+<view class="shoppingcart-footer flex-box flex-box-center">
+    <view class="flex-item flex-box flex-box-center" catchtap="checkAll">
+      <image src="/images/checked.png" mode="aspectFit" class="icon icon-big" wx:if="{{checkAll}}"></image>
+      <image src="/images/check.png" mode="aspectFit" class="icon icon-big" wx:if="{{!checkAll}}"></image>
+      <view class="bold">全选</view>
+      <view class="section flex-item text-right">合计：5000</view>
+    </view>
+    <view class="fi-b250 flex-box flex-box-center full-height text-white bg-primary">结算</view>
+</view>

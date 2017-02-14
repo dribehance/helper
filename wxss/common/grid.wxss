@@ -1,0 +1,27 @@
+/*grid layout*/
+.grid {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+.grid-cell {
+  flex: 1 0 auto;
+  box-sizing: border-box;
+}
+.gc-1of2 {
+  flex: 0 0 50%;
+  overflow: hidden;
+}
+.gc-1of3 {
+  flex: 0 0 33.33%;
+  overflow: hidden;
+}
+.gc-1of4 {
+  flex: 0 0 25%;
+  overflow: hidden;
+}
+.gc-1of5 {
+  flex: 0 0 20%;
+  overflow: hidden;
+}

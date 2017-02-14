@@ -1,0 +1,23 @@
+/*justified layout*/
+.justified {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.justified-cell {
+  flex: 1 0 auto;
+  box-sizing: border-box;
+}
+.jc-1of2 {
+  flex: 0 0 49%;
+}
+.jc-1of3 {
+  flex: 0 0 32%;
+}
+.jc-1of4 {
+  flex: 0 0 24%;
+}
+.jc-1of5 {
+  flex: 0 0 19%;
+}

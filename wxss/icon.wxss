@@ -1,0 +1,18 @@
+/*icon css*/
+.icon {
+  display: inline-block;
+  width: 30rpx;
+  height: 30rpx;
+  position: relative;
+  top: -2rpx;
+  vertical-align: middle;
+  text-align: center;
+}
+.icon.icon-big {
+  width: 50rpx;
+  height: 50rpx;
+}
+.icon.icon-category {
+  width: 100rpx;
+  height: 100rpx;
+}

@@ -1,0 +1,34 @@
+
+<!-- pages/products/products.wxml -->
+<view class="justified sort-bar text-center">
+  <view class="justified-cell jc-1of4 sort-bar-item {{page.type == '10'?'active':''}}" data-type="10" catchtap="sort">综合</view>
+  <view class="justified-cell jc-1of4 sort-bar-item {{(page.type == '20'||page.type == '21')?'active':''}}" data-type="20"
+        catchtap="sort">销量</view>
+  <view class="justified-cell jc-1of4 sort-bar-item {{(page.type == '30'||page.type =='31')?'active ':''}}"
+        data-type="30" catchtap="sort">
+    <image class="icon" wx:if="{{ page.type == '30'}}" src="/images/sort_asc.png"></image>
+    <image class="icon" wx:if="{{ page.type == '31'}}" src="/images/sort_desc.png"></image>
+    价格
+  </view>
+    <navigator url="/pages/category/filter/filter" class="justified-cell jc-1of4 sort-bar-item">
+      <image class="icon" src="/images/filter.png"></image>
+      刷选
+  </navigator>
+    </view>
+    <view style="height:100rpx"></view>
+    <!-- products list -->
+    <view class="product-list">
+      <navigator url="/pages/product/product?id={{item.id}}" class="flex-box flex-box-center product-item"
+                 wx:for="{{goods.list}}" wx:key="{{id}}">
+        <view class="fi-1of4 full-height">
+          <image src="{{item.cover}}" mode="aspectFill" class="full-width full-height"></image>
+        </view>
+        <view class="flex-item product-content">
+          <view class="product-name">{{item.title}}</view>
+          <view class="text-primary bold inline text-big">{{item.show_price}}元</view>
+          <view class="text-primary text-small inline text-through">{{item.show_original_price}}元</view>
+        </view>
+      </navigator>
+      <view class="flex-box flex-box-center full-height" wx:if="{{goods.totalRow == 0}}">暂无产品</view>
+    </view>
+    <!-- products list end -->
