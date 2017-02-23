@@ -4,7 +4,7 @@ Page({
   data: {},
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
-    this.getCategorys();
+    this.reload();
   },
   getCategorys: function () {
     App.HttpService.getCategorys().then(function (data) {
@@ -24,6 +24,13 @@ Page({
     this.setData({
       currentCategory: currentCategory
     })
+  },
+  reload:function(){
+    this.getCategorys();
+  },
+  onImageLoadError:function(e) {
+    var that = this;
+    App.Utils.onImageLoadError(e,that);
   },
   onReady: function () {
     // 页面渲染完成

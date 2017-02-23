@@ -7,9 +7,11 @@
 @import "/wxss/common/form.wxss";
 /*layout css*/
 page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background-color: #f8f8f8;
   /*background-color:white;*/
-  /*height: 100%;*/
 }
 navigator {
   box-sizing: border-box;
@@ -19,6 +21,19 @@ view {
   line-height: 1.5;
   vertical-align: middle;
   box-sizing: border-box;
+}
+button::after {
+  border:none;
+}
+.scroll-view {
+  position: relative;
+}
+.scroll-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
 }
 /*float layout*/
 .pull-right {

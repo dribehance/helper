@@ -55,20 +55,35 @@ Page({
   onUnload: function () {
     // 页面关闭
   },
-  onReachBottom: function () {
+  onImageLoadError: function (e) {
+    var that = this;
+    App.Utils.onImageLoadError(e, that);
+  },
+  loadMore: function () {
     if (this.loading) return;
-    if (this.data.goods.totalRow == this.data.goods.list.length) {
+    if (!this.data.noMore && this.data.goods.totalRow == this.data.goods.list.length) {
       App.WxService.showToast({
         title: "已经加载完数据",
         icon: "success",
         duration: 2000
       });
-      return;
+      this.setData({
+        noMore: true,
+        noMoreMessage: "加载完成，共" + this.data.goods.list.length + "条记录"
+      });
     }
-    var pn = this.data.page.pn;
-    this.setData({
-      "page.pn": pn + 1
-    });
-    this.getProducts();
+    if (this.data.goods.totalRow == 0) {
+      this.setData({
+        noMoreMessage: "暂无数据"
+      })
+    }
+    if (this.data.goods.totalRow > this.data.goods.list.length) {
+      var pn = this.data.page.pn;
+      this.setData({
+        "page.pn": pn + 1,
+        noMore: false
+      });
+      this.getProducts();
+    }
   }
 })

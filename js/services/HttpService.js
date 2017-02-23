@@ -1,6 +1,7 @@
 import ServiceBase from 'ServiceBase';
 import __config from '../etc/config'
-import Tools from 'Tools';
+import Tools from 'Tools'
+import es6 from '../utils/plugins/es6-promise'
 const tools = new Tools();
 class Service extends ServiceBase {
 	constructor() {
@@ -8,82 +9,177 @@ class Service extends ServiceBase {
 		this.$$prefix = ''
 		this.$$path = [{
 			method: "get",
-			name: "index",
+			name: "getIndex",
 			route: '/app/home/index',
-			interceptors:[this.imageInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
-			name: "product",
+			name: "getProduct",
 			route: '/app/goods/detail',
-			interceptors:[this.imageInterceptor(),this.tokenInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
-			name: "products",
+			name: "getProducts",
 			route: '/app/catalog/goods_list_by_catalog',
-			interceptors:[this.imageInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
-			name: "categorys",
+			name: "getProductsByKeyword",
+			route: '/app/goods/goods_list_by_catalog',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			method: "get",
+			name: "getCategorys",
 			route: '/app/catalog/index',
-			interceptors:[this.imageInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
-			name: "keywords",
+			name: "getKeywords",
 			route: '/app/searcher/hot_keyword',
-			interceptors:[this.imageInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	我的购物车
 			method: "get",
-			name: "shoppingcart",
+			name: "getShoppingcart",
 			route: '/app/goods/shopping_car',
-			interceptors:[this.imageInterceptor(),this.tokenInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	加入购物车
 			method: "post",
-			name: "tocart",
+			name: "postTocart",
 			route: '/app/goods/add_to_shopping_car',
-			interceptors:[this.imageInterceptor(),this.tokenInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	修改购物车
 			method: "put",
-			name: "tocart",
+			name: "putTocart",
 			route: '/app/goods/change_shopping_car',
-			interceptors:[this.imageInterceptor(),this.tokenInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	删除购物车
 			method: "delete",
-			name: "shoppingcart",
+			name: "deleteShoppingcart",
 			route: '/app/goods/delete_shopping_car',
-			interceptors:[this.imageInterceptor(),this.tokenInterceptor()]
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	优优惠券列表
+			method: "get",
+			name: "getCoupons",
+			route: '/app/usercenter/vanchers_list',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	领取优惠券
+			method: "get",
+			name: "selectCoupon",
+			route: '/app/home/pickup_vancher',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	待付款
+			method: "get",
+			name: "getUnpayOrders",
+			route: '/app/goods/topayOrders',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	已付款
+			method: "get",
+			name: "getPayOrders",
+			route: '/app/goods/payOrders',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	收货地址
+			method: "get",
+			name: "getAddress",
+			route: '/app/usercenter/address_list',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	新增地址
+			method: "post",
+			name: "postAddress",
+			route: '/app/usercenter/add_address',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	修改收货地址
+			method: "put",
+			name: "putAddress",
+			route: '/app/usercenter/modify_address',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	删除收货地址
+			method: "delete",
+			name: "deleteAddress",
+			route: '/app/usercenter/delete_address',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	login
+			method: "post",
+			name: "postLogin",
+			route: '/app/usercenter/login',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	同步用户信息到服务器
+			method: "post",
+			name: "postUserInfo",
+			route: '/app/usercenter/set_user_info',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	获取刷选条件
+			method: "get",
+			name: "getFilterInfo",
+			route: '/app/goods/filter',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}];
 		var that = this;
 		this.$$path.forEach(function (path, index) {
 			(function (path) {
-				var name = path.name.replace(/_([0-9]|[a-z])/g, function (letter) {
-					return letter.split("_")[1].toUpperCase();
-				});
-				name = name.replace(/^\S/g, (s) => s.toUpperCase());
-				that[`${path.method}${name}`] = function (params) {
+				that[`${path.name}`] = function (params) {
 					if (!params) params = {};
-					// post & put
 					var header = {}, interceptors = path.interceptors || [];
-					if (path.method.toLowerCase() == "post" || path.method.toLowerCase() == "put") {
-						header["Content-Type"] = "application/x-www-form-urlencoded";
-					}
-					// delete 
-					if (path.method.toLowerCase() == "delete") {
-						path.route = `${path.route}?${tools.paramSerializer(params)}`;
-					}
-					// get
-					return that[`${path.method.toLowerCase()}Request`](path.route, params, header, interceptors);
+					return that[`getRequest`](path.route, params, header, interceptors);
 				}
 			})(path)
 		});
 	}
+	networkInterceptor() {
+		return {
+			request: (request) => {
+				var obj = {};
+				return new es6.Promise((resolve, reject) => {
+					obj.success = (res) => {
+						if (res.networkType == "none") {
+							wx.hideToast();
+							wx.showModal({
+								title: '友情提示',
+								content: '网络不佳，请稍后重试',
+								showCancel: !1,
+								success: function () {
+									wx.navigateBack();
+								}
+							});
+							reject("network error");
+						}
+						else {
+							resolve(request);
+						}
+					}
+					obj.fail = (res) => reject(res)
+					wx.getNetworkType(obj)
+				})
+			},
+			requestError: (requestError) => {
+				return requestError;
+			},
+			response: (response) => {
+				return response;
+			},
+			responseError: (responseError) => {
+				return responseError
+			}
+		}
+	}
 	tokenInterceptor() {
 		return {
 			request: (request) => {
-				request.data.user_id = "1";
+				request.data.rd_session = wx.getStorageSync('rd_session');
 				return request
 			},
 			requestError: (requestError) => {

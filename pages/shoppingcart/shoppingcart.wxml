@@ -1,21 +1,21 @@
 
 <!--pages/shoppingcart/shoppingcart.wxml-->
-<view class="shoppincart-swipe-wrap" wx:for="{{shoppingcartList}}" wx:key>
+<view class="shoppingcart-swipe-wrap" wx:for="{{goods}}" wx:key="{{shopping_car_id}}">
   <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" animation="{{item.animateData}}" bindtouchmove="ontouchmove" bindtouchstart="ontouchstart" bindtouchend="ontouchend" data-touchstart="{{item.touchstartData}}" data-touchmove="{{item.touchmoveData}}" data-touchend="{{item.touchendData}}"  data-index="{{index}}">
     <view class="fi-b60 flex-box flex-box-center full-height" catchtap="check" data-index="{{index}}">
       <image src="/images/checked.png" mode="aspectFit" class="icon icon-big" wx:if="{{item.check}}"></image>
       <image src="/images/check.png" mode="aspectFit" class="icon icon-big" wx:if="{{!item.check}}"></image>
     </view>
     <view class="fi-1of4 full-height" catchtap="check" data-index="{{index}}">
-      <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+      <image src="{{item.cover}}" mode="aspectFit" class="full-width full-height" binderror="onImageLoadError" data-error-ref="goods[{{index}}].cover" data-error-url="/images/default.png"></image>
     </view>
-    <view class="flex-item flex-box flex-box-column">
+    <view class="flex-item flex-box flex-box-column product-content">
       <view class="flex-item product-name">
-        {{item.name}}
+        {{item.title}}
       </view>
-      <view class="text-light">{{item.color}}</view>
+      <view class="text-light text-overflow" style="min-height:30rpx"><text wx:for="{{item.goods_nature}}" wx:key="{{goods_id}}" wx:for-item="gn">{{gn.selective}},</text></view>
       <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-        <view class="flex-item text-primary">{{item.price}}</view>
+        <view class="flex-item text-primary">{{item.show_price}}元</view>
         <view class="control-bar">
           <view class="control-bar-minus {{item.amount == 1 ?'disabled':''}}" data-index="{{index}}" catchtouchend="minus">-</view>
           <view class="control-bar-text">{{item.amount}}</view>
@@ -25,15 +25,21 @@
     </view>
   </view>
   <!--delete btn-->
-  <view class="delete-btn">删除</view>
+  <view class="delete-btn" catchtap="deleteShoppingcart" data-id="{{item.shopping_car_id}}">删除</view>
 </view>
-<view style="height:90rpx"></view>
-<view class="shoppingcart-footer flex-box flex-box-center">
+<view class="flex-item flex-box flex-box-center" wx:if="{{goods.length==0}}">
+  <image src="/images/shoppingcart_blank.png" mode="aspectFit" class="icon icon-blank"></image>
+</view>
+<view class="flex-item flex-box flex-box-center" wx:if="{{!goods}}" catchtap="reload">
+  <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+</view>
+<view style="height:90rpx" wx:if="{{goods.length>0}}"></view>
+<view class="shoppingcart-footer flex-box flex-box-center" wx:if="{{goods.length>0}}">
     <view class="flex-item flex-box flex-box-center" catchtap="checkAll">
       <image src="/images/checked.png" mode="aspectFit" class="icon icon-big" wx:if="{{checkAll}}"></image>
       <image src="/images/check.png" mode="aspectFit" class="icon icon-big" wx:if="{{!checkAll}}"></image>
       <view class="bold">全选</view>
-      <view class="section flex-item text-right">合计：5000</view>
+      <view class="section flex-item text-right">合计：{{total_money}}元</view>
     </view>
-    <view class="fi-b250 flex-box flex-box-center full-height text-white bg-primary">结算</view>
+    <view class="fi-b250 flex-box flex-box-center full-height text-white bg-primary" catchtap="fillInOrder">结算</view>
 </view>

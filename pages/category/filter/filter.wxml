@@ -1,57 +1,49 @@
 <!-- pages/category/filter/filter.wxml -->
-<view class="list-group">
-    <view class="list-group-item flex-box flex-box-column">
-        <view class="flex-item full-width margin-b12 bold">价格区间</view>
-        <view class="flex-item flex-box flex-box-center">
-            <view class="flex-item">
-                <input type="digit" placeholder="最低价格" focus class="input full-width text-center bg-light"  />
+<view class="flex-item flex-box flex-box-column">
+    <view class="flex-item scroll-view">
+        <scroll-view scroll-y="true" class="scroll-content">
+            <view class="list-group">
+                <view class="list-group-item flex-box flex-box-column">
+                    <view class="flex-item full-width margin-b12 bold">价格区间</view>
+                    <view class="flex-item flex-box flex-box-center">
+                        <view class="flex-item">
+                            <input type="digit" placeholder="最低价格" value="{{minPrice}}" focus class="input full-width text-center bg-light" bindinput="minPrice" />
+                        </view>
+                        <view class="fi-b88 text-center">-</view>
+                        <view class="flex-item">
+                            <input type="digit" placeholder="最高价格" value="{{maxPrice}}" class="input full-width text-center bg-light"  bindinput="maxPrice"/>
+                        </view>
+                    </view>
+                </view>
             </view>
-            <view class="fi-b88 text-center">-</view>
-            <view class="flex-item">
-                <input type="digit" placeholder="最高价格" class="input full-width text-center bg-light"  />
+            <view class="list-group">
+                <view class="list-group-item" data-type="category" catchtap="collapse">
+                    <view class="list-group-item-text bold">分类</view>
+                    <view class="text-light">
+                        全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
+                    </image>
+                </view>
+            </view>
+            <view class="list-group-item flex-box" wx:if="{{type == 'category'}}">
+                <view class="size-btn {{item.id == selectedCategory.id?'bg-primary text-white':'bg-default'}}" wx:for="{{subcatalog}}" wx:key="id" data-selected-category="{{item}}" catchtap="selectCategory">{{item.name}}</view>
             </view>
         </view>
-    </view>
-</view>
-<view class="list-group">
-    <view class="list-group-item">
-        <view class="list-group-item-text bold">
-            分类
+        <view class="list-group">
+            <view class="list-group-item" data-type="brand" catchtap="collapse">
+                <view class="list-group-item-text bold">品牌</view>
+                <view class="text-light">
+                    全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
+                </image>
+            </view>
         </view>
-        <view class="text-light">
-            全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small"></image>
-        </view>
-    </view>
-    <view class="list-group-item flex-box">
-        <view class="size-btn bg-default">category</view>
-        <view class="size-btn bg-default">category</view>
-        <view class="size-btn bg-default">category</view>
-        <view class="size-btn bg-default">category</view>
-        <view class="size-btn bg-default">category</view>
-    </view>
-</view>
-<view class="list-group">
-    <view class="list-group-item">
-        <view class="list-group-item-text bold">
-            品牌
-        </view>
-        <view class="text-light">
-            全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small"></image>
+        <view class="list-group-item flex-box" wx:if="{{type == 'brand'}}">
+            <view class="size-btn {{item.id == selectedBrand.id?'bg-primary text-white':'bg-default'}}" wx:for="{{brands}}" wx:key="id" data-selected-brand="{{item}}" catchtap="selectBrand">{{item.name}}</view>
         </view>
     </view>
-    <view class="list-group-item flex-box">
-        <view class="size-btn bg-default">brand</view>
-        <view class="size-btn bg-default">brand</view>
-        <view class="size-btn bg-default">brandbrand</view>
-        <view class="size-btn bg-default">brand</view>
-        <view class="size-btn bg-default">brand</view>
+</scroll-view>
     </view>
-</view>
-<view class="filter-footer flex-box flex-box-center bg-white">
-    <view class="flex-item flex-box flex-box-center text-center full-height bg-light">
-        重置
-    </view>
-    <view class="flex-item flex-box flex-box-center text-center full-height text-primary">
-        确认
+    <view class="filter-footer flex-box flex-box-center bg-white">
+        <view class="flex-item flex-box flex-box-center text-center full-height bg-light" catchtap="reset">重置</view>
+        <view class="flex-item flex-box flex-box-center text-center full-height text-primary" catchtap="confirm">确认</view>
     </view>
 </view>

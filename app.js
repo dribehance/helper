@@ -5,6 +5,7 @@ import HttpService from 'js/services/HttpService'
 import WxService from 'js/services/WxService'
 import Tools from 'js/services/Tools'
 import Config from 'js/etc/config'
+import Utils from 'js/utils/utils'
 
 App({
 	onLaunch() {
@@ -19,7 +20,24 @@ App({
 	getUserInfo() {
 		return this.WxService.login()
 		.then(data => {
+			return this.HttpService.postLogin({code:data.code})
+		})
+		.then(data => {
+			return this.WxService.setStorage({
+				key:"rd_session",
+				data: data.LoginResponse.rd_session
+			});
+		})
+		.then(data => {
 			return this.WxService.getUserInfo()
+		})
+		.then(data => {
+			this.HttpService.postUserInfo({
+				rd_session:this.WxService.getStorageSync("3d_session"),
+				cover:data.userInfo.avatarUrl,
+				nickname:data.userInfo.nickName
+			});
+			return data;
 		})
 		.then(data => {
 			this.globalData.userInfo = data.userInfo
@@ -35,4 +53,5 @@ App({
 	WxService: new WxService, 
 	Tools: new Tools, 
 	Config: Config, 
+	Utils: Utils, 
 })

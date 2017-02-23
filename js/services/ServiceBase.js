@@ -27,13 +27,13 @@ class ServiceBase {
         // 发起请求所支持的方法
         this.instanceSource = {
             method: [
-                'OPTIONS', 
-                'GET', 
-                'HEAD', 
-                'POST', 
-                'PUT', 
-                'DELETE', 
-                'TRACE', 
+                'OPTIONS',
+                'GET',
+                'HEAD',
+                'POST',
+                'PUT',
+                'DELETE',
+                'TRACE',
                 'CONNECT',
             ]
         }
@@ -43,7 +43,7 @@ class ServiceBase {
      * 遍历对象构造方法，方法名以小写字母+后缀名
      */
     __initMethods() {
-        for(let key in this.instanceSource) {   
+        for (let key in this.instanceSource) {
             this.instanceSource[key].forEach((method, index) => {
                 this[method.toLowerCase() + this.suffix] = (...args) => this.__defaultRequest(method, ...args)
             })
@@ -58,7 +58,7 @@ class ServiceBase {
      * @param {Object} header 设置请求的 header
      * @param {String} dataType 请求的数据类型
      */
-    __defaultRequest(method = '', url = '', params = {}, header = {}, interceptors = [],dataType = 'json') {
+    __defaultRequest(method = '', url = '', params = {}, header = {}, interceptors = [], dataType = 'json') {
         const $$header = Object.assign({}, this.setHeaders(), header)
         const $$url = this.setUrl(url)
 
@@ -74,11 +74,11 @@ class ServiceBase {
 
         // 请求参数配置
         const $$config = {
-            url: $$url, 
-            data: params, 
-            header: $$header, 
-            method: method, 
-            dataType: dataType, 
+            url: $$url,
+            data: params,
+            header: $$header,
+            method: method,
+            dataType: dataType,
         }
 
         let requestInterceptors = []
@@ -92,7 +92,7 @@ class ServiceBase {
                 requestInterceptors.push(n.request, n.requestError)
             }
             if (n.response || n.responseError) {
-                responseInterceptors.unshift(n.response, n.responseError)
+                responseInterceptors.push(n.response, n.responseError)
             }
         })
 
@@ -152,9 +152,9 @@ class ServiceBase {
      */
     setHeaders() {
         return {
-        	// 'Accept': 'application/json', 
-        	// 'Content-type': 'application/json', 
-            'Authorization': 'Bearer ' + wx.getStorageSync('token'), 
+            // 'Accept': 'application/json', 
+            // 'Content-type': 'application/json', 
+            'Authorization': 'Bearer ' + wx.getStorageSync('token'),
         }
     }
 
@@ -170,10 +170,10 @@ class ServiceBase {
                     request.header.Authorization = 'Bearer ' + wx.getStorageSync('token')
                 }
                 wx.showToast({
-                    title: '加载中', 
-                    icon: 'loading', 
-                    duration: 10000, 
-                    mask: !0, 
+                    title: '加载中',
+                    icon: 'loading',
+                    duration: 10000,
+                    mask: !0,
                 })
                 return request
             },
@@ -182,19 +182,41 @@ class ServiceBase {
                 return requestError
             },
             response: (response) => {
-                response.responseTimestamp = new Date().getTime()
-                if(response.statusCode === 401) {
-                    wx.removeStorageSync('token')
-                    wx.redirectTo({
-                        url: '/pages/login/index'
-                    })
-                }
-                wx.hideToast()
-                return response
+                return new es6.Promise((resolve, reject) => {
+                    wx.hideToast();
+                    response.responseTimestamp = new Date().getTime();
+                    if (response.statusCode === 401) {
+                        wx.removeStorageSync('token')
+                        wx.redirectTo({
+                            url: '/pages/login/index'
+                        })
+                    }
+                    if (typeof response.data == "string") {
+                        var data = response.data
+                            .replace(/\n+/g, "")
+                            .replace(/\t+/g, "")
+                        response.data = JSON.parse(data);
+                    }
+                    // data invalid
+                    if (!response.data) {
+                        wx.showModal({
+                            title: '友情提示',
+                            content: '数据加载出错，请稍后再试',
+                            showCancel: !1,
+                            success: function () {
+                                wx.navigateBack();
+                            }
+                        });
+                        reject("No response");
+                    }
+                    else {
+                        resolve(response);
+                    }
+                });
             },
             responseError: (responseError) => {
-                wx.hideToast()
-                return responseError
+                wx.hideToast();
+                return responseError;
             },
         }].concat(interceptors)
     }

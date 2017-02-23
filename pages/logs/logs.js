@@ -1,5 +1,5 @@
 //logs.js
-var util = require('../../js/utils/util.js')
+var util = require('../../js/utils/utils.js')
 Page({
   data: {
     logs: []

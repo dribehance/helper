@@ -1,73 +1,72 @@
-<import src="../../wxParse/wxParse.wxml"/> 
-<!--pages/product/goods.wxml-->
-<swiper indicator-dots="true" autoplay="false" interval="5000" duration="1000" class="product-swiper">
-  <block wx:for="{{goods.banner}}" wx:key="{{}}">
-    <swiper-item class="text-center">
-      <image src="{{item.name}}" mode="aspectFit" class="full-height" />
-    </swiper-item>
-  </block>
-</swiper>
-<view class="list-group">
-  <view class="list-group-item">
-    <view class="list-group-item-text">
-      <view>{{goods.title}}</view>
-      <view class="text-primary text-big bold inline">{{goods.show_price}}</view>
-      <view class="text-gray text-through text-small inline">{{goods.show_original_price}}</view>
+<import src="../../wxParse/wxParse.wxml"  />
+<!-- pages/product/goods.wxml -->
+<view class="flex-item scroll-view">
+  <scroll-view scroll-y="true" class="scroll-content full-height">
+    <swiper indicator-dots="true" autoplay="false" interval="5000" duration="1000" class="product-swiper">
+      <block wx:for="{{goods.banner}}" wx:key="{{}}">
+        <swiper-item class="text-center">
+          <image src="{{item.name}}" mode="aspectFit" class="full-height" binderror="onImageLoadError"
+                 data-error-ref="goods.banner[{{index}}].name" data-error-url="/images/default.png"  />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="list-group">
+      <view class="list-group-item">
+        <view class="list-group-item-text">
+          <view>{{goods.title}}</view>
+          <view class="text-primary text-big bold inline">{{goods.show_price}}元</view>
+          <view class="text-gray text-through text-small inline">{{goods.show_original_price}}元</view>
+        </view>
+        <view class="fi-b100 flex-box flex-box-center flex-box-column" catchtap="save">
+          <image src="/images/save.png" mode="aspectFit" class="icon icon-big" wx:if="{{!goods.is_save}}"></image>
+          <image src="/images/save_1.png" mode="aspectFit" class="icon icon-big" wx:if="{{goods.is_save}}"></image>
+          <view class="text-small text-lighter {{goods.is_save?'text-primary':''}}">收藏</view>
+        </view>
+      </view>
+      <view class="list-group-item" wx:if="{{goods.selected_goods_nature.length}}">
+        <view class="list-group-item-text">
+          已选 <text wx:for="{{goods.selected_goods_nature}}">
+        </text>
+      </view>
     </view>
-    <view class="fi-b100 flex-box flex-box-center flex-box-column" catchtap="save">
-      <image src="/images/save.png" mode="aspectFit" class="icon icon-big" wx:if="{{!goods.is_save}}"></image>
-      <image src="/images/save_1.png" mode="aspectFit" class="icon icon-big" wx:if="{{goods.is_save}}"></image>
-      <view class="text-small text-lighter {{goods.is_save?'text-primary':''}}">收藏</view>
+    <view class="list-group-item" wx:for="{{goods.nature}}" wx:key="{{}}">
+      <view class="list-group-item-label">{{item.name}}</view>
+      <view class="list-group-item-text">
+        <view class="size-btn bg-default" wx:for="{{item.data}}" wx:for-item="gn" wx:key="{{}}">{{gn}}</view>
+      </view>
     </view>
-  </view>
-  <view class="list-group-item">
-    <view class="list-group-item-text">
-      已选 175/88AA , 1 个
-    </view>
-  </view>
-  <view class="list-group-item" wx:for="{{goods.specifications}}" wx:key="{{}}">
-    <view class="list-group-item-label">{{item.name}}</view>
-    <view class="list-group-item-text">
-      <view class="size-btn bg-default" wx:for="{{item.list}}" wx:key="{{}}" wx:for-item="s">{{s}}</view>
-    </view>
-  </view>
-  <view class="list-group-item">
-    <view class="list-group-item-label">数量</view>
-    <view class="list-group-item-text">
-      <view class="control-bar">
-        <view class="control-bar-minus disabled">-</view>
-        <view class="control-bar-text">1</view>
-        <view class="control-bar-plus">+</view>
+    <view class="list-group-item">
+      <view class="list-group-item-label">数量</view>
+      <view class="list-group-item-text">
+        <view class="control-bar">
+          <view class="control-bar-minus {{item.amount == 1 ?'disabled':''}}" catchtouchend="minus">-</view>
+          <view class="control-bar-text">{{goods.amount}}</view>
+          <view class="control-bar-plus" catchtouchend="plus">+</view>
+        </view>
       </view>
     </view>
   </view>
-</view>
-<view class="flex-box tab-bar" catchtap="switchTab">
-  <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '1'?'tab-bar-item-active':''}}" data-index="1">
-    商品介绍
+  <view class="flex-box tab-bar" catchtap="switchTab">
+    <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '1'?'tab-bar-item-active':''}}"
+          data-index="1">商品介绍</view>
+    <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '2'?'tab-bar-item-active':''}}"
+          data-index="2">规格参数</view>
+    <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '3'?'tab-bar-item-active':''}}"
+          data-index="3">售后保障</view>
   </view>
-  <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '2'?'tab-bar-item-active':''}}" data-index="2">
-    规格参数
+  <view class="webview section">
+    <template is="wxParse" wx:if="{{activeTab == '1'}}" data="{{wxParseData:description.tagArray}}"  />
+    <template is="wxParse" wx:if="{{activeTab == '2'}}" data="{{wxParseData:spec.tagArray}}"  />
+    <template is="wxParse" wx:if="{{activeTab == '3'}}" data="{{wxParseData:service.tagArray}}"  />
   </view>
-  <view class="flex-item flex-box flex-box-center full-height tab-bar-item {{activeTab == '3'?'tab-bar-item-active':''}}" data-index="3">
-    售后保障
-  </view>
+</scroll-view>
 </view>
-<view class="webview">
-  <template is="wxParse" wx:if="{{activeTab == '1'}}" data="{{wxParseData:description.tagArray}}"/>
-  <template is="wxParse" wx:if="{{activeTab == '2'}}" data="{{wxParseData:spec.tagArray}}"/>
-  <template is="wxParse" wx:if="{{activeTab == '3'}}" data="{{wxParseData:service.tagArray}}"/>
-</view>
-<view style="height:90rpx"></view>
 <view class="product-detail-footer flex-box">
-  <navigator url="/pages/shoppingcart/shoppingcart" open-type="switchTab" hover-class="none" class="fi-b150 flex-box flex-box-center flex-box-column full-height text-center bg-default text-light">
-    <image src="/images/index_4_normal.png" mode="aspectFit" class="icon icon-big"></image>
-    <view class="text-small">购物车</view>
-  </navigator>
-  <view class="flex-item flex-box flex-box-center full-height text-white bg-info">
-    加入购物车
-  </view>
-  <navigator url="/pages/payment/payment" class="flex-item flex-box flex-box-center full-height text-white bg-primary">
-    立即购买
-  </navigator>
+<navigator url="/pages/shoppingcart/shoppingcart" open-type="switchTab" hover-class="none"
+           class="fi-b150 flex-box flex-box-center flex-box-column full-height text-center bg-default text-light">
+  <image src="/images/index_4_normal.png" mode="aspectFit" class="icon icon-big"></image>
+  <view class="text-small">购物车</view>
+</navigator>
+<view class="flex-item flex-box flex-box-center full-height text-white bg-info" catchtap="postToCart">加入购物车</view>
+<view class="flex-item flex-box flex-box-center full-height text-white bg-primary" catchtap="fillInOrder">立即购买</view>
 </view>

@@ -2,83 +2,64 @@
 const App = getApp();
 Page({
   data: {
-    shoppingcartList: [{
-      name: " Apple Iphone 7 A1660移动联通电信三合一",
-      color: "黑色",
-      price: "5220",
-      amount: 1,
-      imageUrl: "/images/example.png",
-      check: true,
-      touchstartData: {},
-      touchmoveData: {},
-      touchendData: {},
-      animateData: {}
-    }, {
-      name: " Apple Iphone 6 A1660移动联通电信三合一",
-      color: "黑色",
-      price: "5220",
-      amount: 1,
-      imageUrl: "/images/example.png",
-      check: true,
-      touchstartData: {},
-      touchmoveData: {},
-      touchendData: {},
-      animateData: {}
-    }, {
-      name: " Apple Iphone 5 A1660移动联通电信三合一",
-      color: "黑色",
-      price: "5220",
-      amount: 1,
-      imageUrl: "/images/example.png",
-      check: true,
-      touchstartData: {},
-      touchmoveData: {},
-      touchendData: {},
-      animateData: {}
-    }, {
-      name: " Apple Iphone 7 A1660移动联通电信三合一",
-      color: "黑色",
-      price: "5692",
-      amount: 1,
-      imageUrl: "/images/example.png",
-      check: true,
-      touchstartData: {},
-      touchmoveData: {},
-      touchendData: {},
-      animateData: {}
-    }, {
-      name: " Apple Iphone 7 A1660移动联通电信三合一",
-      color: "黑色",
-      price: "5220",
-      amount: 1,
-      imageUrl: "/images/example.png",
-      check: true,
-      touchstartData: {},
-      touchmoveData: {},
-      touchendData: {},
-      animateData: {}
-    }],
-    checkAll: true
+    checkAll: true,
   },
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
-    // this.deleteShoppingcart();
+    this.reload();
   },
   getShoppingcart: function () {
     App.HttpService.getShoppingcart().then(function (data) {
-      console.log(data)
-    })
+      data.ShoppingCarResponse.goods.map(function (g) {
+        g.touchstartData = {};
+        g.touchmoveData = {};
+        g.touchendData = {};
+        g.animateData = {};
+        g.check = true;
+      })
+      this.setData(data.ShoppingCarResponse);
+      this.calculateTotalMoney();
+    }.bind(this))
   },
-  deleteShoppingcart: function () {
+  deleteShoppingcart: function (e) {
+    var id = e.currentTarget.dataset.id;
     App.HttpService.deleteShoppingcart({
-      shopping_car_id: 2
+      shopping_car_id: id
     }).then(function (data) {
       App.WxService.showToast({
         title: "删除成功",
         icon: "success",
         duration: 2000
+      });
+      var goods = this.data.goods.filter(function (g) {
+        return g.shopping_car_id != id;
       })
+      this.setData({
+        goods: goods
+      });
+      this.calculateTotalMoney();
+    }.bind(this))
+  },
+  calculateTotalMoney: function () {
+    var total_money = 0;
+    this.data.goods.forEach(function (g) {
+      if (g.check) {
+        total_money += g.show_price * g.amount;
+      }
+    });
+    this.setData({
+      total_money: total_money
     })
+  },
+  fillInOrder: function () {
+    var goods = this.data.goods.filter(function (g) {
+      return g.check
+    })
+    App.WxService.setStorage({
+      key: "cache_goods",
+      data: goods
+    });
+    App.WxService.navigateTo("/pages/payment/payment");
   },
   translateX: function (index, x) {
     var animation = wx.createAnimation({
@@ -87,30 +68,43 @@ Page({
     })
 
     this.animation = animation;
-
     animation.translateX(x).step();
 
-    var shoppingcartList = this.data.shoppingcartList;
-    for (var i = 0; i < shoppingcartList.length; i++) {
+    var animation_reset = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+    })
+
+    this.animation_reset = animation_reset;
+
+    animation_reset.translateX(0).step();
+
+    var goods = this.data.goods;
+    for (var i = 0; i < goods.length; i++) {
       if (i == index) {
-        shoppingcartList[i].animateData = animation;
+        goods[i].animateData = animation;
+      }
+      else {
+        goods[i].animateData = animation_reset;
       }
     }
-
     this.setData({
-      shoppingcartList: shoppingcartList
+      goods: goods
     })
   },
   ontouchstart: function (e) {
     var current_index = e.currentTarget.dataset.index,
-      shoppingcartList = this.data.shoppingcartList;
-    for (var i = 0; i < shoppingcartList.length; i++) {
+      goods = this.data.goods;
+    for (var i = 0; i < goods.length; i++) {
       if (i == current_index) {
-        shoppingcartList[i].touchstartData = e.changedTouches[0];
+        goods[i].touchstartData = e.changedTouches[0];
+      }
+      else {
+        goods[i].touchstartData = {};
       }
     }
     this.setData({
-      shoppingcartList: shoppingcartList
+      goods: goods
     })
   },
   ontouchmove: function (e) {
@@ -138,60 +132,82 @@ Page({
     this.translateX(current_index, deltaX);
   },
   check: function (e) {
-    var current_index = e.currentTarget.dataset.index, uncheck_size = 0, shoppingcartList = this.data.shoppingcartList;
-    for (var i = 0; i < shoppingcartList.length; i++) {
+    var current_index = e.currentTarget.dataset.index, uncheck_size = 0, goods = this.data.goods;
+    for (var i = 0; i < goods.length; i++) {
       if (current_index == i) {
-        shoppingcartList[i].check = !shoppingcartList[i].check;
+        goods[i].check = !goods[i].check;
       }
-      if (!shoppingcartList[i].check) {
+      if (!goods[i].check) {
         uncheck_size++;
       }
     }
     this.setData({
-      shoppingcartList: shoppingcartList,
+      goods: goods,
       checkAll: uncheck_size > 0 ? false : true
     })
+    this.calculateTotalMoney();
   },
   checkAll: function (e) {
-    var shoppingcartList = this.data.shoppingcartList,
+    var goods = this.data.goods,
       checkAll = !this.data.checkAll;
-    for (var i = 0; i < shoppingcartList.length; i++) {
-      shoppingcartList[i].check = checkAll;
+    for (var i = 0; i < goods.length; i++) {
+      goods[i].check = checkAll;
     }
     this.setData({
-      shoppingcartList: shoppingcartList,
+      goods: goods,
       checkAll: checkAll
     })
+    this.calculateTotalMoney();
   },
   minus: function (e) {
-    var shoppingcartList = this.data.shoppingcartList,
+    var goods = this.data.goods,
       current_index = e.currentTarget.dataset.index;
-    for (var i = 0; i < shoppingcartList.length; i++) {
+    for (var i = 0; i < goods.length; i++) {
       if (i == current_index) {
-        shoppingcartList[i].amount = Math.max(1, --shoppingcartList[i].amount);
+        goods[i].amount = Math.max(1, --goods[i].amount);
       }
     }
     this.setData({
-      shoppingcartList: shoppingcartList
+      goods: goods
     })
+    this.calculateTotalMoney();
   },
   plus: function (e) {
-    var shoppingcartList = this.data.shoppingcartList,
+    var goods = this.data.goods,
       current_index = e.currentTarget.dataset.index;
-    for (var i = 0; i < shoppingcartList.length; i++) {
+    for (var i = 0; i < goods.length; i++) {
       if (i == current_index) {
-        shoppingcartList[i].amount++;
+        goods[i].amount++;
       }
     }
     this.setData({
-      shoppingcartList: shoppingcartList
+      goods: goods
     })
+    this.calculateTotalMoney();
+  },
+  reload: function () {
+    this.getShoppingcart();
+  },
+  onImageLoadError: function (e) {
+    var that = this;
+    App.Utils.onImageLoadError(e, that);
+  },
+  onReachBottom: function () {
+    // this.getShoppingcart();
   },
   onReady: function () {
     // 页面渲染完成
   },
   onShow: function () {
     // 页面显示
+    App.WxService.getStorage({
+      key: "info"
+    }).then(function (response) {
+      if (response.data == "shoppingcartUpdate") {
+        this.getShoppingcart();
+      }
+      App.WxService.removeStorageSync("info");
+    }.bind(this))
   },
   onHide: function () {
     // 页面隐藏

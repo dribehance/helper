@@ -1,22 +1,27 @@
 // pages/me/coupons/coupons.js
+const App = getApp();
 Page({
-  data:{
-    coupons:[{
-      name:"仅可用于手套类",
-      price:"1000",
-      message:"已经使用",
-      summary:"满1000元可用用",
-      expired_time:"2017-06-10"
-    },{
-      name:"仅可用于手套类",
-      price:"1000",
-      message:"已经使用",
-      summary:"满1000元可用用",
-      expired_time:"2017-06-10"
-    }]
-  },
+  data:{},
   onLoad:function(options){
     // 页面初始化 options为页面跳转所带来的参数
+    this.getCoupons();
+    this.options = options;
+  },
+  getCoupons:function(){
+    App.HttpService.getCoupons().then(function(data){
+      this.setData(data.UserVancersResponse);
+    }.bind(this))
+  },
+  selectCoupon:function(e){
+    if (!this.options.from) return;
+    var coupon = this.data.vanchers.filter(function(c){
+      return c.vancher_id == e.currentTarget.dataset.id;
+    })
+    App.WxService.setStorage({
+      key:"cache_coupon",
+      data:coupon[0]
+    });
+    App.WxService.navigateBack();
   },
   onReady:function(){
     // 页面渲染完成

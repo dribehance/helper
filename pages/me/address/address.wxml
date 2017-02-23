@@ -1,18 +1,33 @@
-<!--pages/me/address/address.wxml-->
-<view class="list-group">
-    <view class="list-group-item" wx:for="{{addresses}}" wx:key="{{}}">
-        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{item.check}}"></image>
-        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{!item.check}}"></image>
-        <view class="list-group-item-text flex-box flex-box-column" data-index="{{index}}" catchtap="check">
-            <view class="bold text-big">{{item.name}} {{item.telephone}}</view>
-            <view>{{item.province+item.city+item.district+item.street}}</view>
-            <view class="text-primary" wx:if="{{item.check}}">默认地址</view>
-            <view wx:if="{{item.check}}" wx:if="{{!item.check}}">设为默认</view>
+<!-- pages/me/address/address.wxml -->
+<view class="flex-item scroll-view" wx:if="{{addresses.length>0}}">
+    <scroll-view scroll-y="true" class="scroll-content">
+        <view class="list-group">
+            <view class="list-group-item-wrap" wx:for="{{addresses}}" wx:key="{{id}}">
+                <view class="list-group-item" animation="{{item.animateData}}" bindtouchmove="ontouchmove"
+                      bindtouchstart="ontouchstart" bindtouchend="ontouchend" data-touchstart="{{item.touchstartData}}"
+                      data-touchmove="{{item.touchmoveData}}" data-touchend="{{item.touchendData}}"
+                      data-index="{{index}}" style="position:relative;z-index:10">
+                    <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{item.is_default == 0}}"></image>
+                    <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{item.is_default == 1}}"></image>
+                    <view class="list-group-item-text flex-box flex-box-column" data-index="{{index}}" catchtap="check">
+                        <view class="bold text-big">{{item.name}} {{item.mask_telephone}}</view>
+                        <view>{{item.province+item.city+item.area+item.street}}</view>
+                        <view class="text-primary" wx:if="{{item.is_default == 1}}">默认地址</view>
+                        <view wx:if="{{item.is_default == 0}}" catchtab="setDefault">设为默认</view>
+                    </view>
+                    <view class="edit-btn" data-index="{{index}}" catchtap="edit">编辑</view>
+                </view>
+                <!-- delete btn -->
+                <view class="delete-btn" catchtap="deleteAddress" data-id="{{item.id}}">删除</view>
+            </view>
         </view>
-        <navigator class="edit-btn" url="/pages/me/address/create_address/create_address" catchtap="edit">编辑</navigator>
-    </view>
+    </scroll-view>
 </view>
-<view style="height:100rpx;"></view>
-<navigator url="/pages/me/address/create_address/create_address" open-type="{{redirect?'redirect':'navigate'}}" class="address-footer flex-box flex-box-center bold">
-    + 新建地址
-</navigator>
+<view class="flex-item flex-box flex-box-center" wx:if="{{addresses.length==0}}">
+    <image src="/images/address_blank.png" mode="aspectFit" class="icon icon-blank"></image>
+</view>
+<view class="flex-item flex-box flex-box-center" wx:if="{{!addresses}}">
+    <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+</view>
+<navigator url="/pages/me/address/create_address/create_address" open-type="{{redirect?'redirect':'navigate'}}"
+           class="address-footer flex-box flex-box-center bold">+ 新建地址</navigator>

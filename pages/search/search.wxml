@@ -1,19 +1,20 @@
 
-<!--pages/search/search.wxml-->
-<view class="section flex-box flex-box-center bg-white">
-  <view class="flex-item flex-box flex-box-center">
-    <input placeholder="关键字搜索" class="search-input" auto-focus/>
+<!-- pages/search/search.wxml -->
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class="section flex-box flex-box-center bg-white">
+    <view class="flex-item flex-box flex-box-center">
+      <input placeholder="关键字搜索" name="keyword" class="search-input"auto-focus/>
+    </view>
+    <button type="default" formType="submit" size="mini" class="fi-b150 flex-box flex-box-center search-btn">搜索</button>
   </view>
-  <button type="default" size="mini" class="fi-b150 flex-box flex-box-center search-btn"> 搜索 </button>
+</form>
+<view class="section text-big"  wx:if="{{history_keywords.length>0}}">历史搜索 <text class="text-primary pull-right" catchtap="clear">清空</text></view>
+<view>
+  <navigator url="/pages/search/result/result?keyword={{item}}" class="size-btn bg-default" wx:for="{{history_keywords}}"
+             wx:key="{{}}">{{item}}</navigator>
 </view>
-<view class="section text-big">
-  历史搜索
+<view class="section text-big"  wx:if="{{keywords.length>0}}">热门搜索</view>
+<view>
+  <navigator url="/pages/search/result/result?keyword={{item.keyword}}" class="size-btn bg-default" wx:for="{{keywords}}"
+             wx:key="{{}}">{{item.keyword}}</navigator>
 </view>
-<view class="size-btn bg-default">198/88A</view>
-<view class="size-btn bg-primary text-white">198/88A</view>
-<view class="size-btn bg-default">198/88A</view>
-<view class="size-btn bg-default">198/88A</view>
-<view class="section text-big">
-  热门搜索
-</view>
-<view class="size-btn bg-default" wx:for="{{keywords}}" wx:key="{{}}">{{item.keyword}}</view>

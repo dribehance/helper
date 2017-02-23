@@ -1,9 +1,9 @@
 <!--pages/me/me.wxml-->
 <view class="section flex-box flex-box-center bg-primary text-white">
-    <image src="{{userInfo.avatarUrl || '/images/example.png'}}" mode="aspectFill" class="avatar"></image>
+    <image src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill" class="avatar"></image>
     <view class="section flex-item flex-box flex-box-column">
-        <view class="flex-item text-big bold">{{userInfo.nickName}}</view>
-        <view class="flex-item">{{userInfo.gender}}</view>
+        <view class="flex-item text-big bold">{{userInfo.nickName||"康邦用户"}}</view>
+        <!-- <view class="flex-item">{{userInfo.gender}}</view> -->
     </view>
 </view>
 <view class="list-group">
@@ -14,14 +14,14 @@
         </view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
     </navigator>
-    <navigator url="/pages/me/orders/orders" class="list-group-item">
+    <navigator url="/pages/me/orders/orders?type=unpay" class="list-group-item">
         <image src="/images/wait_money.png" mode="aspectFit" class="list-group-item-image"></image>
         <view class="list-group-item-text">
             代付款
         </view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
     </navigator>
-    <navigator url="/pages/me/orders/orders" class="list-group-item">
+    <navigator url="/pages/me/orders/orders?type=pay" class="list-group-item">
         <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
         <view class="list-group-item-text">
             待收货

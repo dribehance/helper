@@ -1,16 +1,19 @@
 <!--pages/payment/fapiao/fapiao.wxml-->
+<form bindsubmit="formSubmit" bindreset="formReset">
 <view class="list-group">
     <view class="list-group-header text-small bg-light">
         发票内容
     </view>
-    <view class="list-group-item">
-        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png"></image>
+    <view class="list-group-item" data-type="detail" catchtap="selectFapiao">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{fapiao.type=='detail'}}"></image>
+        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{fapiao.type=='no'}}"></image>
         <view class="list-group-item-text">
             明细
         </view>
     </view>
-    <view class="list-group-item">
-        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png"></image>
+    <view class="list-group-item" data-type="no" catchtap="selectFapiao">
+        <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{fapiao.type=='detail'}}"></image>
+        <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{fapiao.type=='no'}}"></image>
         <view class="list-group-item-text">
             不开发票
         </view>
@@ -22,10 +25,11 @@
     </view>
     <view class="list-group-item">
         <view class="list-group-item-text">
-            <input type="text" placeholder="发票抬头" focus class="full-width" />
+            <input type="text" name="name" value="{{fapiao.name}}" placeholder="发票抬头" focus class="full-width" />
         </view>
     </view>
 </view>
 <view class="section">
-    <button type="warn">确定</button>
+    <button type="warn" formType="submit">确定</button>
 </view>
+</form>

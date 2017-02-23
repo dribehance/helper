@@ -1,36 +1,28 @@
 <!-- pages/me/orders/orders.wxml -->
-<view class="list-group">
-    <view class="list-group-header flex-box text-small bg-light">
-        <view class="flex-item">订单编号 77777777</view>
+<view class="list-group" wx:for="{{orders}}" wx:key="{{group_id}}">
+    <navigator class="list-group-header flex-box text-small bg-light" url="/pages/payment/payment" wx:if="{{params.type=='unpay'}}">
+        <view class="flex-item">订单编号 {{item.group_id}}</view>
         <view>去付款</view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+    </navigator>
+    <view class="list-group-header flex-box text-small bg-light" wx:if="{{params.type=='pay'}}">
+        <view class="flex-item">订单编号 {{item.group_id}}</view>
+        <view>已支付</view>
+        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
     </view>
-    <navigator class="list-group-item-text flex-box flex-box-center" url="/pages/me/order/order">
-        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
-              data-index="{{index}}">
+    <navigator class="list-group-item-text flex-box flex-box-center" url="/pages/me/order/order?id={{item.group_id}}">
+        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{item.group}}" wx:for-item="it" wx:key="{{}}">
             <view class="fi-1of4 full-height">
-                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+                <image src="{{it.cover}}" mode="aspectFit" class="full-width full-height"></image>
             </view>
             <view class="flex-item flex-box flex-box-column">
-                <view class="flex-item product-name">{{item.name}}</view>
-                <view class="text-light">{{item.color}}</view>
+                <view class="flex-item product-name">{{it.goods_title}}</view>
+                <view class="text-light">{{"x"+it.amount}} {{it.total_price}}元</view>
                 <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-                    <view class="flex-item text-primary">{{item.price}}</view>
-                </view>
-            </view>
-        </view>
-        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
-              data-index="{{index}}">
-            <view class="fi-1of4 full-height">
-                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
-            </view>
-            <view class="flex-item flex-box flex-box-column">
-                <view class="flex-item product-name">{{item.name}}</view>
-                <view class="text-light">{{item.color}}</view>
-                <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-                    <view class="flex-item text-primary">{{item.price}}</view>
+                    <view class="flex-item text-primary">{{it.goods_price}}元</view>
                 </view>
             </view>
         </view>
     </navigator>
 </view>
+<view wx:if="{{orders.length == 0}}" class="text-center">暂无订单</view>
