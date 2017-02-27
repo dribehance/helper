@@ -20,7 +20,7 @@
                 <view class="list-group-item" data-type="category" catchtap="collapse">
                     <view class="list-group-item-text bold">分类</view>
                     <view class="text-light">
-                        全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
+                        <text wx:if="{{!selectedCategory.name}}">全部</text> <text wx:if="{{selectedCategory.name}}">{{selectedCategory.name}} </text> <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
                     </image>
                 </view>
             </view>
@@ -32,7 +32,7 @@
             <view class="list-group-item" data-type="brand" catchtap="collapse">
                 <view class="list-group-item-text bold">品牌</view>
                 <view class="text-light">
-                    全部 <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
+                    <text wx:if="{{!selectedBrand.name}}">全部</text><text wx:if="{{selectedBrand.name}}">{{selectedBrand.name}} </text> <image src="/images/arrow_down.png" mode="aspectFit" class="icon small">
                 </image>
             </view>
         </view>

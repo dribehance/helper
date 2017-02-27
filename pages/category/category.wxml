@@ -23,6 +23,6 @@
   </scroll-view>
 </view>
 <!-- category list end -->
-<view class="flex-item flex-box flex-box-center" wx:if="{{!catalogs}}" catchtap="reload">
+<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}" catchtap="reload">
   <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
 </view>

@@ -1,49 +1,52 @@
-<!--pages/me/order/order.wxml-->
+<!-- pages/me/order/order.wxml -->
 <view class="list-group">
     <view class="list-group-header flex-box text-small bg-light">
-        <view class="flex-item">订单编号 77777777</view>
+        <view class="flex-item bold">订单编号 {{group_id}}</view>
+        <view class="flex-item text-right">{{address.post_time}}</view>
     </view>
-    <view class="list-group-item-text flex-box flex-box-center">
+    <view class="list-group-item-text flex-box flex-box-center" wx:if="{{orders.length>0}}">
         <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
-              data-index="{{index}}">
+              wx:key="{{}}" data-index="{{index}}">
             <view class="fi-1of4 full-height">
-                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
+                <image src="{{item.cover}}" mode="aspectFit" class="full-width full-height"></image>
             </view>
-            <view class="flex-item flex-box flex-box-column">
-                <view class="flex-item product-name">{{item.name}}</view>
-                <view class="text-light">{{item.color}}</view>
+            <view class="flex-item flex-box flex-box-column product-content">
+                <view class="flex-item product-name">{{item.goods_title}}</view>
+                <view class="text-light"><text wx:for="{{item.nature}}" wx:key="{{goods_id}}" wx:for-item="gn">{{gn.selective}} </text> {{"x"+item.amount}} </view>
                 <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-                    <view class="flex-item text-primary">{{item.price}}</view>
-                </view>
-            </view>
-        </view>
-        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{orders}}"
-              data-index="{{index}}">
-            <view class="fi-1of4 full-height">
-                <image src="{{item.imageUrl}}" mode="aspectFit" class="full-width full-height"></image>
-            </view>
-            <view class="flex-item flex-box flex-box-column">
-                <view class="flex-item product-name">{{item.name}}</view>
-                <view class="text-light">{{item.color}}</view>
-                <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-                    <view class="flex-item text-primary">{{item.price}}</view>
+                    <view class="flex-item text-primary">￥{{item.goods_price}} <text wx:if="{{item.norm}}">{{item.norm}}</text></view>
                 </view>
             </view>
         </view>
     </view>
 </view>
 <view class="list-group">
-    <view class="list-group-item">
+    <view class="list-group-item" wx:if="{{address}}">
         <image class="list-group-item-image" mode="aspectFill" src="/images/location.png"></image>
         <view class="list-group-item-text flex-box flex-box-column">
-            <view class="bold text-big">梁渝铭 185*****4021</view>
-            <view>广东省深圳市宝安区名优采购中心工业产业园</view>
+            <view class="bold text-big">{{address.name}} {{address.telephone}}</view>
+            <view>{{address.province+address.city+address.area+address.street}}</view>
         </view>
     </view>
     <view class="list-group-item">
         <view class="text-big bold">发票</view>
         <view class="list-group-item-text section">
-            <view>深圳夸克时代在线技术有限公司</view>
+            <view wx:if="{{receipt}}">{{receipt}}</view>
+            <view wx:if="{{!receipt}}">不开发票</view>
         </view>
+    </view>
+    <view class="list-group-item">
+        <view class="text-big bold">留言</view>
+        <view class="list-group-item-text section">
+            <view wx:if="{{address.note}}">{{address.note}}</view>
+            <view wx:if="{{!address.note}}">无留言</view>
+        </view>
+    </view>
+</view>
+<view class="list-group" wx:if="{{status == 10}}">
+    <view class="list-group-item flex-box flex-box-column">
+        <button type="warn" plain="true" bindtap="cancelOrder" class="full-width">取消订单</button>
+        <view style="height:15rpx"></view>
+        <button type="primary" bindtap="payOrder" class="full-width">支付订单</button>
     </view>
 </view>

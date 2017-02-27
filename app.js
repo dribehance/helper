@@ -9,13 +9,13 @@ import Utils from 'js/utils/utils'
 
 App({
 	onLaunch() {
-		console.log('onLaunch')
+		// console.log('onLaunch');
 	},
 	onShow() {
-		console.log('onShow')
+		// console.log('onShow')
 	},
 	onHide() {
-		console.log('onHide')
+		// console.log('onHide')
 	},
 	getUserInfo() {
 		return this.WxService.login()
@@ -40,7 +40,8 @@ App({
 			return data;
 		})
 		.then(data => {
-			this.globalData.userInfo = data.userInfo
+			this.globalData.userInfo = data.userInfo;
+			data.userInfo.avatarUrl = data.userInfo.avatarUrl.replace("http://","https://");
 			return this.globalData.userInfo
 		})
 	},

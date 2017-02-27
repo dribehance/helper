@@ -20,6 +20,10 @@
   width: 100%;
   height: 300rpx;
 }
+.icon.icon-coming {
+  width:100%;
+  height: 70px;
+}
 .icon.icon-error {
   width: 100%;
   height: 750rpx;

@@ -14,9 +14,9 @@ Page({
       this.setData(data.FilterResponse)
     });
   },
-  getFilterInfoFromCache:function(){
+  getFilterInfoFromCache: function () {
     App.WxService.getStorage({
-      key:"filter"
+      key: "cache_filter"
     }).then(response => {
       this.setData(response.data)
     });
@@ -51,16 +51,22 @@ Page({
     });
   },
   confirm: function () {
-    var that = this;
+    var that = this,
+      minPrice = Math.min(that.data.minPrice, that.data.maxPrice) || 0,
+      maxPrice = Math.max(that.data.minPrice, that.data.maxPrice) || 10000;
     App.WxService.setStorage({
-      key: "filter",
+      key: "cache_filter",
       data: {
-        minPrice: that.data.minPrice,
-        maxPrice: that.data.maxPrice,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
         selectedBrand: that.data.selectedBrand,
         selectedCategory: that.data.selectedCategory
       }
     }).then(data => {
+      App.WxService.setStorage({
+        key: "info",
+        data: "filterChange"
+      });
       App.WxService.navigateBack();
     });
   },
@@ -72,7 +78,7 @@ Page({
       selectedCategory: ""
     })
     App.WxService.removeStorage({
-      key:"filter"
+      key: "cache_filter"
     });
   },
   onReady: function () {

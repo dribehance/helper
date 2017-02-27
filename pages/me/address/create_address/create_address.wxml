@@ -48,6 +48,6 @@
     </view>
 </view>
 <view class="section">
-    <button type="warn" formType="submit">添加地址</button>
+    <button type="warn" formType="submit">保存</button>
 </view>
 </form>

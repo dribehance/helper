@@ -10,19 +10,89 @@ Page({
     this.getProduct(options.id);
   },
   getProduct: function (id) {
-    App.HttpService.getProduct({ goods_id: id }).then(function (data) {
+    App.HttpService.getProduct({ goods_id: id }).then(data => {
       this.setData(data.GoodsDetailResponse);
       this.setData({
         "goods.amount": 1,
-        "goods.goods_id": id
+        "goods.goods_id": id,
+        "goods.status": 1
       })
       // 原数据格式不对
       WxParse.wxMoreParse("description", "html", this.data.goods.description, this);
       WxParse.wxMoreParse("spec", "html", this.data.goods.spec, this);
       WxParse.wxMoreParse("service", "html", this.data.goods.service, this);
-    }.bind(this));
+    }, error => {
+      this.setData(error)
+    });
   },
-  save: function () { },
+  save: function () {
+    if (this.data.goods.is_collect == 1) {
+      this.cancelSaveGoods();
+      return;
+    }
+    if (this.data.goods.is_collect == 0) {
+      this.saveGoods();
+      return;
+    }
+  },
+  saveGoods: function () {
+    App.HttpService.save({
+      goods_id: this.data.goods.goods_id
+    }).then(data => {
+      this.setData({
+        "goods.is_collect": 1
+      })
+      setTimeout(() => {
+        App.WxService.showToast({
+          title: data.CollectResponse.message,
+          icon: "success",
+          duration: 2000
+        });
+      }, 1000);
+    });
+  },
+  cancelSaveGoods: function () {
+    App.HttpService.cancelSave({
+      goods_id: this.data.goods.goods_id
+    }).then(data => {
+      this.setData({
+        "goods.is_collect": 0
+      });
+      setTimeout(() => {
+        App.WxService.showToast({
+          title: data.CollectResponse.message,
+          icon: "success",
+          duration: 2000
+        });
+      }, 1000);
+    });
+  },
+  selectNature: function (e) {
+    var index = e.currentTarget.dataset.index,
+      name = e.target.dataset.name,
+      selected = {};
+    if (name) {
+      var key = "goods.nature[" + index + "].selected";
+      selected[key] = name;
+      this.setData(selected);
+      this.getNature();
+    }
+  },
+  getNature: function () {
+    var nature = this.data.goods.nature.map(n => {
+      return n.name + ":" + n.selected;
+    }).join("、");
+    App.HttpService.getNature({
+      goods_id: this.data.goods.goods_id,
+      nature: nature
+    }).then(data => {
+      this.setData({
+        "goods.show_price": data.NatureResponse.price,
+        "goods.status": data.NatureResponse.status,
+        "goods.goods_nature_single_group": data.NatureResponse.single_group
+      });
+    });
+  },
   minus: function (e) {
     var amount = this.data.goods.amount - 1;
     if (amount < 1) {
@@ -62,14 +132,14 @@ Page({
           key: "info",
           data: "shoppingcartUpdate"
         })
-      }, 500);
+      }, 1000);
     })
   },
   fillInOrder: function () {
     var goods = [];
     App.WxService.setStorage({
-      key:"cache_goods",
-      data:[this.data.goods]
+      key: "cache_goods",
+      data: [this.data.goods]
     });
     App.WxService.navigateTo("/pages/payment/payment");
   },

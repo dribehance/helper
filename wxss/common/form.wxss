@@ -1,7 +1,7 @@
-button[type="primary"] {
+/*button[type="primary"] {
   color: #fff;
   background-color: #ff5252;
-}
+}*/
 .input {
     padding: 12rpx;
     border-radius: 3rpx;

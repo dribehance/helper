@@ -7,15 +7,17 @@ Page({
     this.reload();
   },
   getCategorys: function () {
-    App.HttpService.getCategorys().then(function (data) {
+    App.HttpService.getCategorys().then(data => {
       this.setData(data.CatalogResponse);
       this.setData({
-        currentCategory:data.CatalogResponse.catalogs[0]
+        currentCategory: data.CatalogResponse.catalogs[0]
       })
-    }.bind(this))
+    }, error => {
+      this.setData(error)
+    });
   },
   getSubCategorys: function () {
-    this.data.catalogs.forEach(function(c,i){
+    this.data.catalogs.forEach(function (c, i) {
 
     })
   },
@@ -25,12 +27,12 @@ Page({
       currentCategory: currentCategory
     })
   },
-  reload:function(){
+  reload: function () {
     this.getCategorys();
   },
-  onImageLoadError:function(e) {
+  onImageLoadError: function (e) {
     var that = this;
-    App.Utils.onImageLoadError(e,that);
+    App.Utils.onImageLoadError(e, that);
   },
   onReady: function () {
     // 页面渲染完成

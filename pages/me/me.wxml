@@ -1,56 +1,51 @@
-<!--pages/me/me.wxml-->
-<view class="section flex-box flex-box-center bg-primary text-white">
-    <image src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill" class="avatar"></image>
-    <view class="section flex-item flex-box flex-box-column">
-        <view class="flex-item text-big bold">{{userInfo.nickName||"康邦用户"}}</view>
-        <!-- <view class="flex-item">{{userInfo.gender}}</view> -->
-    </view>
-</view>
-<view class="list-group">
-    <navigator url="/pages/me/orders/orders" class="list-group-item">
-        <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            全部订单
+<!-- pages/me/me.wxml -->
+<view class="flex-item scroll-view">
+    <scroll-view scroll-y="true" class="scroll-content">
+        <view class="section flex-box flex-box-center bg-primary">
+            <image src="{{userInfo.avatarUrl}}" mode="aspectFill" class="avatar" binderror="onImageLoadError"
+                   data-error-ref="userInfo.avatarUrl" data-error-url="/images/default.png"></image>
+            <view class="section flex-item flex-box flex-box-column">
+                <view class="flex-item text-big bold text-white">{{userInfo.nickName||"康邦用户"}}</view>
+                <!-- <view class="flex-item">
+                {{userInfo.gender}}</view>
+                -->
+            </view>
         </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-    <navigator url="/pages/me/orders/orders?type=unpay" class="list-group-item">
-        <image src="/images/wait_money.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            代付款
+        <view class="list-group">
+            <navigator url="/pages/me/orders/orders?type=all" class="list-group-item">
+                <image src="/images/all_order.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">全部订单</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
+            <navigator url="/pages/me/orders/orders?type=unpay" class="list-group-item">
+                <image src="/images/wait_money.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">待付款</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
+            <navigator url="/pages/me/orders/orders?type=pay" class="list-group-item">
+                <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">待收货</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
         </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-    <navigator url="/pages/me/orders/orders?type=pay" class="list-group-item">
-        <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            待收货
+        <view class="list-group">
+            <navigator url="/pages/me/coupons/coupons" class="list-group-item">
+                <image src="/images/coupon.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">优惠券</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
         </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-</view>
-<view class="list-group">
-    <navigator url="/pages/me/coupons/coupons" class="list-group-item">
-        <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            优惠券
+        <view class="list-group">
+            <navigator url="/pages/me/favorite/favorite" class="list-group-item">
+                <image src="/images/favourite.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">我的收藏</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
+            <navigator url="/pages/me/address/address" class="list-group-item">
+                <image src="/images/address.png" mode="aspectFit" class="list-group-item-image"></image>
+                <view class="list-group-item-text">收货地址</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
+            </navigator>
         </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-</view>
-<view class="list-group">
-    <navigator url="/pages/me/favorite/favorite" class="list-group-item">
-        <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            我的收藏
-        </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-    <navigator url="/pages/me/address/address" class="list-group-item">
-        <image src="/images/wait_product.png" mode="aspectFit" class="list-group-item-image"></image>
-        <view class="list-group-item-text">
-            收货地址
-        </view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
+    </scroll-view>
 </view>

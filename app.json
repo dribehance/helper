@@ -29,15 +29,16 @@
     "pages/logs/logs"
   ],
   "window":{
-    "backgroundTextStyle":"white",
-    "navigationBarBackgroundColor": "#000",
-    "navigationBarTitleText": "好帮手",
-    "backgroundColor": "#f8f8f8",
-    "navigationBarTextStyle":"white"
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "康邦",
+    "navigationBarTextStyle":"black",
+    "backgroundTextStyle":"dark",
+    "backgroundColor": "#f8f8f8"
   },
   "tabBar": {
-    "color": "#d5d5d5",
+    "color": "#a5a5a5",
     "selectedColor": "#ff5252",
+    "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/index/index",
       "text": "首页",
@@ -64,5 +65,12 @@
       "iconPath": "images/index_5_normal.png",
       "selectedIconPath": "images/index_5_press.png"
     }]
-  }
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000,
+    "uploadFile": 10000,
+    "connectSocket": 10000
+  },
+  "debug": true
 }

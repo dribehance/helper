@@ -4,9 +4,16 @@ Page({
   data: {},
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
+    var userInfo = App.globalData.userInfo || {
+      avatarUrl:"/images/avatar.png"
+    };
     this.setData({
-      userInfo: App.globalData.userInfo
+      userInfo: userInfo
     });
+  },
+  onImageLoadError: function (e) {
+    var that = this;
+    App.Utils.onImageLoadError(e, that);
   },
   onReady: function () {
     // 页面渲染完成

@@ -1,2 +1,2 @@
 <!--pages/webview/webview.wxml-->
-<text>pages/webview/webview.wxml</text>
+<image src="{{banner.content}}" class="full-width" mode="widthFix" bindtap="jump"></image>

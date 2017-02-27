@@ -9,6 +9,7 @@ Page({
       page: {
         pn: 1,
         type: 10,
+        filter: 0,
         subcatalog_id: options.id
       }
     });
@@ -17,7 +18,7 @@ Page({
   },
   getProducts: function () {
     this.loading = true;
-    App.HttpService.getProducts(this.data.page).then(function (data) {
+    App.HttpService.getProducts(this.data.page).then(data => {
       var response = data.CatalogResponse;
       if (this.data.page.pn == 1) {
         this.setData({
@@ -27,7 +28,9 @@ Page({
       response.goods.list = this.data.goods.list.concat(response.goods.list);
       this.setData(response);
       this.loading = false
-    }.bind(this));
+    }, error => {
+      this.setData(error)
+    });
   },
   sort: function (e) {
     var type = e.target.dataset.type;
@@ -43,21 +46,27 @@ Page({
     })
     this.getProducts();
   },
-  onReady: function () {
-    // 页面渲染完成
-  },
-  onShow: function () {
-    // 页面显示
-  },
-  onHide: function () {
-    // 页面隐藏
-  },
-  onUnload: function () {
-    // 页面关闭
-  },
   onImageLoadError: function (e) {
     var that = this;
     App.Utils.onImageLoadError(e, that);
+  },
+  getFilterFromCache: function () {
+    var filter = App.WxService.getStorageSync("cache_filter");
+    if (!App.Tools.isEmptyObject(filter)) {
+      var page = {
+        pn: 1,
+        type: this.data.page.type,
+        subcatalog_id: filter.selectedCategory && filter.selectedCategory.id,
+        min_price: filter.minPrice,
+        max_price: filter.maxPrice,
+        brand: filter.selectedBrand && filter.selectedBrand.name,
+        filter: 1
+      }
+      this.setData({
+        page: page
+      });
+      this.getProducts();
+    }
   },
   loadMore: function () {
     if (this.loading) return;
@@ -85,5 +94,26 @@ Page({
       });
       this.getProducts();
     }
+  },
+  onReady: function () {
+    // 页面渲染完成
+  },
+  onShow: function () {
+    // 页面显示
+    App.WxService.getStorage({
+      key: "info"
+    }).then(response => {
+      if (response.data == "filterChange") {
+        this.getFilterFromCache();
+        App.WxService.removeStorageSync("info");
+      }
+    })
+  },
+  onHide: function () {
+    // 页面隐藏
+  },
+  onUnload: function () {
+    // 页面关闭
+    App.WxService.removeStorageSync("cache_filter");
   }
 })

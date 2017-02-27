@@ -1,4 +1,7 @@
 /*text font size*/
+.text-large {
+  font-size: 40rpx;
+}
 .text-big {
   font-size: 36rpx;
 }
@@ -31,4 +34,7 @@
 }
 .text-primary {
   color:#ff5252;
+}
+.text-success {
+  color: limegreen;
 }

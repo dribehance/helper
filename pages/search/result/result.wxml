@@ -1,6 +1,6 @@
 <!-- pages/search/result/result.wxml -->
 <form bindsubmit="formSubmit" bindreset="formReset">
-    <view class="section flex-box flex-box-center bg-white">
+    <view class="search-form flex-box flex-box-center bg-white">
         <view class="flex-item flex-box flex-box-center">
             <input placeholder="关键字搜索" name="keyword" value="{{keyword}}" class="search-input"/>
         </view>
@@ -46,5 +46,5 @@
                 <!-- products list end -->
             </scroll-view>
             <image src="/images/products_blank.png" mode="aspectFit" wx:if="{{goods.totalRow==0}}" class="icon icon-blank"></image>
-            <image src="/images/error.png" mode="aspectFit" class="icon icon-error" wx:if="{{!goods}}"></image>
+            <image src="/images/error.png" mode="aspectFit" class="icon icon-error" wx:if="{{errorCode}}"></image>
         </view>

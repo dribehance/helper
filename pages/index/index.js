@@ -7,20 +7,17 @@ Page({
     this.reload();
   },
   getIndex: function () {
-    App.HttpService.getIndex().then(function (data) {
+    App.HttpService.getIndex().then(data => {
       this.setData(data.HomeResponse);
-    }.bind(this));
+    }, error => {
+      this.setData(error)
+    });
   },
   selectCoupon: function (e) {
     var coupon_id = e.currentTarget.dataset.id;
     App.HttpService.selectCoupon({
       vancher_id: coupon_id
     }).then(data => {
-      App.WxService.showToast({
-        title: `${data.PickUpVancherResponse.message}`,
-        icon: "success",
-        duration: 2000
-      });
       var conpuons = this.data.vanchers.map(v => {
         if (v.id == coupon_id) {
           v.status_info = "领取成功"
@@ -30,7 +27,14 @@ Page({
       });
       this.setData({
         vanchers: conpuons
-      })
+      });
+      setTimeout(() => {
+        App.WxService.showToast({
+          title: `${data.PickUpVancherResponse.message}`,
+          icon: "success",
+          duration: 2000
+        });
+      }, 1000);
     });
   },
   postTocart: function (e) {
@@ -46,9 +50,24 @@ Page({
       });
     })
   },
+  preview:function(e){
+    var index = e.currentTarget.dataset.index,
+      banner = this.data.banners[index];
+      if (banner.action == 0) {
+        banner.target != "#" && App.WxService.navigateTo("/pages/product/product?id="+banner.target);
+      }
+      else {
+        App.WxService.navigateTo("/pages/webview/webview?id="+banner.id);
+      }
+  },
   reload: function () {
-    this.getIndex();
-    App.getUserInfo();
+    App.getUserInfo().then(data => {
+      this.getIndex();
+    },error => {
+      if (error.errMsg == "getUserInfo:fail auth deny") {
+        this.getIndex();
+      }
+    });
   },
   onImageLoadError: function (e) {
     var that = this;

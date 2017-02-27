@@ -104,6 +104,7 @@ Page({
   postAddress: function (params) {
     // 新增地址
     App.HttpService.postAddress(params).then(function (data) {
+      params.id = data.AddAddressResponse.id;
       setTimeout(function () {
         App.WxService.showToast({
           title: data.AddAddressResponse.message,

@@ -7,13 +7,13 @@
                       bindtouchstart="ontouchstart" bindtouchend="ontouchend" data-touchstart="{{item.touchstartData}}"
                       data-touchmove="{{item.touchmoveData}}" data-touchend="{{item.touchendData}}"
                       data-index="{{index}}" style="position:relative;z-index:10">
-                    <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" wx:if="{{item.is_default == 0}}"></image>
+                    <image class="list-group-item-image" mode="aspectFill" src="/images/check.png" data-id="{{item.id}}" catchtap="setDefault" wx:if="{{item.is_default == 0}}"></image>
                     <image class="list-group-item-image" mode="aspectFill" src="/images/checked.png" wx:if="{{item.is_default == 1}}"></image>
                     <view class="list-group-item-text flex-box flex-box-column" data-index="{{index}}" catchtap="check">
-                        <view class="bold text-big">{{item.name}} {{item.mask_telephone}}</view>
-                        <view>{{item.province+item.city+item.area+item.street}}</view>
+                        <view class="text-large">{{item.name}} {{item.mask_telephone}}</view>
+                        <view class="bold text-light">{{item.province+item.city+item.area+item.street}}</view>
                         <view class="text-primary" wx:if="{{item.is_default == 1}}">默认地址</view>
-                        <view wx:if="{{item.is_default == 0}}" catchtab="setDefault">设为默认</view>
+                        <view wx:if="{{item.is_default == 0}}" data-id="{{item.id}}" catchtap="setDefault">设为默认</view>
                     </view>
                     <view class="edit-btn" data-index="{{index}}" catchtap="edit">编辑</view>
                 </view>
@@ -26,8 +26,8 @@
 <view class="flex-item flex-box flex-box-center" wx:if="{{addresses.length==0}}">
     <image src="/images/address_blank.png" mode="aspectFit" class="icon icon-blank"></image>
 </view>
-<view class="flex-item flex-box flex-box-center" wx:if="{{!addresses}}">
+<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
     <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
 </view>
-<navigator url="/pages/me/address/create_address/create_address" open-type="{{redirect?'redirect':'navigate'}}"
+<navigator url="/pages/me/address/create_address/create_address" open-type="{{from?'redirect':'navigate'}}"
            class="address-footer flex-box flex-box-center bold">+ 新建地址</navigator>

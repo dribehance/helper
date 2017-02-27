@@ -9,7 +9,7 @@ Page({
     this.reload();
   },
   getShoppingcart: function () {
-    App.HttpService.getShoppingcart().then(function (data) {
+    App.HttpService.getShoppingcart().then(data => {
       data.ShoppingCarResponse.goods.map(function (g) {
         g.touchstartData = {};
         g.touchmoveData = {};
@@ -19,7 +19,9 @@ Page({
       })
       this.setData(data.ShoppingCarResponse);
       this.calculateTotalMoney();
-    }.bind(this))
+    }, error => {
+      this.setData(error)
+    })
   },
   deleteShoppingcart: function (e) {
     var id = e.currentTarget.dataset.id;
@@ -41,20 +43,25 @@ Page({
     }.bind(this))
   },
   calculateTotalMoney: function () {
-    var total_money = 0;
+    var total_money = 0, settlable = false;
     this.data.goods.forEach(function (g) {
       if (g.check) {
+        settlable = true;
         total_money += g.show_price * g.amount;
       }
     });
     this.setData({
-      total_money: total_money
+      total_money: parseFloat(total_money).toFixed(1),
+      settlable: settlable
     })
   },
   fillInOrder: function () {
     var goods = this.data.goods.filter(function (g) {
       return g.check
     })
+    if (goods.length == 0) {
+      return;
+    }
     App.WxService.setStorage({
       key: "cache_goods",
       data: goods
@@ -160,30 +167,42 @@ Page({
     this.calculateTotalMoney();
   },
   minus: function (e) {
-    var goods = this.data.goods,
+    var goods = this.data.goods, amount,
       current_index = e.currentTarget.dataset.index;
     for (var i = 0; i < goods.length; i++) {
       if (i == current_index) {
         goods[i].amount = Math.max(1, --goods[i].amount);
+        amount = goods[i].amount;
       }
     }
-    this.setData({
-      goods: goods
-    })
-    this.calculateTotalMoney();
+    App.HttpService.changeShoppingcartAmount({
+      shopping_car_id: this.data.goods[e.currentTarget.dataset.index].shopping_car_id,
+      amount: amount,
+    }).then(data => {
+      this.setData({
+        goods: goods
+      })
+      this.calculateTotalMoney();
+    });
   },
   plus: function (e) {
-    var goods = this.data.goods,
+    var goods = this.data.goods, amount,
       current_index = e.currentTarget.dataset.index;
     for (var i = 0; i < goods.length; i++) {
       if (i == current_index) {
         goods[i].amount++;
+        amount = goods[i].amount;
       }
     }
-    this.setData({
-      goods: goods
-    })
-    this.calculateTotalMoney();
+    App.HttpService.changeShoppingcartAmount({
+      shopping_car_id: this.data.goods[e.currentTarget.dataset.index].shopping_car_id,
+      amount: amount,
+    }).then(data => {
+      this.setData({
+        goods: goods
+      })
+      this.calculateTotalMoney();
+    });
   },
   reload: function () {
     this.getShoppingcart();
@@ -205,8 +224,8 @@ Page({
     }).then(function (response) {
       if (response.data == "shoppingcartUpdate") {
         this.getShoppingcart();
+        App.WxService.removeStorageSync("info");
       }
-      App.WxService.removeStorageSync("info");
     }.bind(this))
   },
   onHide: function () {

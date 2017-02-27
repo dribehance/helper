@@ -21,14 +21,14 @@
         <view class="product-list">
           <navigator url="/pages/product/product?id={{item.id}}" class="flex-box flex-box-center product-item"
                      wx:for="{{goods.list}}" wx:key="{{id}}">
-            <view class="fi-1of4 full-height">
+            <view class="fi-1of4 full-height product-list-image">
               <image src="{{item.cover}}" mode="aspectFill" class="full-width full-height" binderror="onImageLoadError"
                      data-error-ref="goods.list[{{index}}].cover" data-error-url="/images/default.png"></image>
             </view>
             <view class="flex-item product-content">
               <view class="product-name">{{item.title}}</view>
-              <view class="text-primary bold inline text-big">{{item.show_price}}元</view>
-              <view class="text-primary text-small inline text-through">{{item.show_original_price}}元</view>
+              <view class="text-primary bold inline text-big">￥{{item.show_price}}</view>
+              <view class="text-primary text-small inline text-through">￥{{item.show_original_price}}</view>
             </view>
           </navigator>
         </view>
@@ -36,5 +36,5 @@
         <!-- products list end -->
       </scroll-view>
       <image src="/images/products_blank.png" mode="aspectFit" class="icon icon-blank" wx:if="{{goods.totalRow==0}}"></image>
-      <image src="/images/error.png" mode="aspectFit" class="icon icon-error" wx:if="{{!goods}}"></image>
+      <image src="/images/error.png" mode="aspectFit" class="icon icon-error" wx:if="{{errorCode}}"></image>
     </view>

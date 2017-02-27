@@ -1,28 +1,43 @@
 <!-- pages/me/orders/orders.wxml -->
-<view class="list-group" wx:for="{{orders}}" wx:key="{{group_id}}">
-    <navigator class="list-group-header flex-box text-small bg-light" url="/pages/payment/payment" wx:if="{{params.type=='unpay'}}">
-        <view class="flex-item">订单编号 {{item.group_id}}</view>
-        <view>去付款</view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
-    <view class="list-group-header flex-box text-small bg-light" wx:if="{{params.type=='pay'}}">
-        <view class="flex-item">订单编号 {{item.group_id}}</view>
-        <view>已支付</view>
-        <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </view>
-    <navigator class="list-group-item-text flex-box flex-box-center" url="/pages/me/order/order?id={{item.group_id}}">
-        <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white" wx:for="{{item.group}}" wx:for-item="it" wx:key="{{}}">
-            <view class="fi-1of4 full-height">
-                <image src="{{it.cover}}" mode="aspectFit" class="full-width full-height"></image>
+<view class="flex-item scroll-view" wx:if="{{orders.length>0}}">
+    <scroll-view scroll-y="true" class="scroll-content">
+        <view class="" wx:for="{{orders}}" wx:key="{{group_id}}">
+            <view class="list-group-header flex-box text-small bg-light" wx:if="{{params.type=='unpay'|| item.status =='10'}}"
+                  data-index="{{index}}" catchtap="payOrder">
+                <view class="flex-item bold">订单编号 {{item.group_id}}</view>
+                <view class="text-primary">去付款 (￥{{item.total_price}})</view>
+                <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
             </view>
-            <view class="flex-item flex-box flex-box-column">
-                <view class="flex-item product-name">{{it.goods_title}}</view>
-                <view class="text-light">{{"x"+it.amount}} {{it.total_price}}元</view>
-                <view class="flex-item flex-box flex-box-center flex-box-between full-width">
-                    <view class="flex-item text-primary">{{it.goods_price}}元</view>
+            <view class="list-group-header flex-box text-small bg-light" wx:if="{{params.type=='pay' || item.status =='20'}}">
+                <view class="flex-item bold">订单编号 {{item.group_id}}</view>
+                <view class="text-success">已支付</view>
+            </view>
+            <view class="list-group-header flex-box text-small bg-light" wx:if="{{item.status =='30'}}">
+                <view class="flex-item bold">订单编号 {{item.group_id}}</view>
+                <view class="text-danger">已取消</view>
+            </view>
+            <navigator class="list-group-item-text flex-box flex-box-center"
+                       url="/pages/me/order/order?id={{item.group_id}}">
+                <view class="shoppingcart-item flex-box flex-box-center full-width full-height bg-white"
+                      wx:for="{{item.group}}" wx:for-item="it" wx:key="{{}}">
+                    <view class="fi-1of3 full-height">
+                        <image src="{{it.cover}}" mode="aspectFill" class="full-width full-height"></image>
+                    </view>
+                    <view class="flex-item flex-box flex-box-column product-content">
+                        <view class="flex-item product-name">{{it.goods_title}}</view>
+                        <view class="text-light"><text wx:for="{{it.nature}}" wx:key="{{goods_id}}" wx:for-item="gn">{{gn.selective}} </text> {{"x"+it.amount}} </view>
+                        <view class="flex-item flex-box flex-box-center flex-box-between full-width">
+                            <view class="flex-item text-primary">￥{{it.goods_price}} <text wx:if="{{it.norm}}">{{it.norm}}</text></view>
+                        </view>
+                    </view>
                 </view>
-            </view>
+            </navigator>
         </view>
-    </navigator>
+    </scroll-view>
 </view>
-<view wx:if="{{orders.length == 0}}" class="text-center">暂无订单</view>
+<view class="flex-item flex-box flex-box-center" wx:if="{{orders.length == 0}}">
+    <image src="/images/order_blank.png" mode="aspectFit" class="icon icon-blank"></image>
+</view>
+<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
+    <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+</view>

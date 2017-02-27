@@ -14,8 +14,18 @@ class Service extends ServiceBase {
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
+			name: "getBanner",
+			route: '/app/home/banner',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			method: "get",
 			name: "getProduct",
 			route: '/app/goods/detail',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			method: "get",
+			name: "getNature",
+			route: '/app/goods/nature',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			method: "get",
@@ -52,7 +62,7 @@ class Service extends ServiceBase {
 		}, {
 			// 	修改购物车
 			method: "put",
-			name: "putTocart",
+			name: "changeShoppingcartAmount",
 			route: '/app/goods/change_shopping_car',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
@@ -62,16 +72,22 @@ class Service extends ServiceBase {
 			route: '/app/goods/delete_shopping_car',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
-			// 	优优惠券列表
+			// 	优惠券列表
 			method: "get",
-			name: "getCoupons",
+			name: "getAllCoupons",
 			route: '/app/usercenter/vanchers_list',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
-			// 	领取优惠券
+			// 	首页领取优惠券
 			method: "get",
 			name: "selectCoupon",
 			route: '/app/home/pickup_vancher',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	支付选取优惠券列表
+			method: "get",
+			name: "getAvailableCoupons",
+			route: '/app/goods/available_vancher',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	待付款
@@ -84,6 +100,42 @@ class Service extends ServiceBase {
 			method: "get",
 			name: "getPayOrders",
 			route: '/app/goods/payOrders',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	全部订单
+			method: "get",
+			name: "getAllOrders",
+			route: '/app/goods/myOrders',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	订单详情
+			method: "get",
+			name: "getOrderById",
+			route: '/app/goods/payOrdersDetails',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	获取预付订单信息
+			method: "get",
+			name: "getPrepayPayOrderInfo",
+			route: '/app/goods/topay',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	生产预付订单
+			method: "get",
+			name: "fillinorder",
+			route: '/app/goods/pre_pay',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	支付订单
+			method: "get",
+			name: "payOrder",
+			route: '/app/goods/wx_pay',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	取消订单
+			method: "get",
+			name: "cancelOrder",
+			route: '/app/usercenter/cancel_order',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
 			// 	收货地址
@@ -104,17 +156,23 @@ class Service extends ServiceBase {
 			route: '/app/usercenter/modify_address',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
+			// 	设置默认地址
+			method: "get",
+			name: "setDefaultAddress",
+			route: '/app/usercenter/set_default_address',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
 			// 	删除收货地址
 			method: "delete",
 			name: "deleteAddress",
 			route: '/app/usercenter/delete_address',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}, {
-			// 	login
+			// 	login code
 			method: "post",
 			name: "postLogin",
 			route: '/app/usercenter/login',
-			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+			interceptors: []
 		}, {
 			// 	同步用户信息到服务器
 			method: "post",
@@ -126,6 +184,24 @@ class Service extends ServiceBase {
 			method: "get",
 			name: "getFilterInfo",
 			route: '/app/goods/filter',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	收藏列表
+			method: "get",
+			name: "getSaveList",
+			route: '/app/usercenter/collect_list',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	加入收藏
+			method: "get",
+			name: "save",
+			route: '/app/usercenter/add_collect',
+			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
+		}, {
+			// 	取消收藏
+			method: "get",
+			name: "cancelSave",
+			route: '/app/usercenter/cancel_collect',
 			interceptors: [this.networkInterceptor(), this.imageInterceptor(), this.tokenInterceptor()]
 		}];
 		var that = this;
@@ -155,7 +231,10 @@ class Service extends ServiceBase {
 									wx.navigateBack();
 								}
 							});
-							reject("network error");
+							reject({
+								errorCode: "none",
+								errorMessage: "网络不佳，请稍后重试"
+							});
 						}
 						else {
 							resolve(request);
@@ -166,30 +245,13 @@ class Service extends ServiceBase {
 				})
 			},
 			requestError: (requestError) => {
-				return requestError;
+				return new es6.Promise((resolve, reject) => reject(requestError));
 			},
 			response: (response) => {
 				return response;
 			},
 			responseError: (responseError) => {
-				return responseError
-			}
-		}
-	}
-	tokenInterceptor() {
-		return {
-			request: (request) => {
-				request.data.rd_session = wx.getStorageSync('rd_session');
-				return request
-			},
-			requestError: (requestError) => {
-				return requestError
-			},
-			response: (response) => {
-				return response
-			},
-			responseError: (responseError) => {
-				return responseError
+				return new es6.Promise((resolve, reject) => reject(responseError));
 			}
 		}
 	}
@@ -229,7 +291,7 @@ class Service extends ServiceBase {
 				return request
 			},
 			requestError: (requestError) => {
-				return requestError
+				return new es6.Promise((resolve, reject) => reject(requestError));
 			},
 			response: (response) => {
 				if (response.statusCode == 200) {
@@ -238,8 +300,33 @@ class Service extends ServiceBase {
 				return response
 			},
 			responseError: (responseError) => {
-				return responseError
+				return new es6.Promise((resolve, reject) => reject(responseError));
 			},
+		}
+	}
+	tokenInterceptor() {
+		return {
+			request: (request) => {
+				return new es6.Promise((resolve, reject) => {
+					if (wx.getStorageSync('rd_session')) {
+						request.data.rd_session = wx.getStorageSync('rd_session');
+						resolve(request);
+					}
+					reject({
+						errorCode: "405",
+						errorMessage: "未登录"
+					});
+				});
+			},
+			requestError: (requestError) => {
+				return new es6.Promise((resolve, reject) => reject(requestError));
+			},
+			response: (response) => {
+				return response
+			},
+			responseError: (responseError) => {
+				return new es6.Promise((resolve, reject) => reject(responseError));
+			}
 		}
 	}
 }

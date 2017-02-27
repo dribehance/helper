@@ -19,7 +19,7 @@ Page({
   },
   getProducts: function () {
     this.loading = true;
-    App.HttpService.getProductsByKeyword(this.data.page).then(function (data) {
+    App.HttpService.getProductsByKeyword(this.data.page).then(data => {
       var response = data.CatalogResponse;
       if (this.data.page.pn == 1) {
         this.setData({
@@ -29,7 +29,9 @@ Page({
       response.goods.list = this.data.goods.list.concat(response.goods.list);
       this.setData(response);
       this.loading = false
-    }.bind(this));
+    }, error => {
+      this.setData(error)
+    });
   },
   sort: function (e) {
     var type = e.target.dataset.type;
@@ -50,7 +52,7 @@ Page({
       key: "cache_history_keywords"
     }).then(function (response) {
       this.setData({
-        history_keywords:response.data
+        history_keywords: response.data
       });
     }.bind(this), function (error) {
       this.setData({
@@ -62,11 +64,11 @@ Page({
     if (!App.Tools.trim(e.detail.value.keyword)) return;
     var history_keywords = this.data.history_keywords;
     // 去重
-    if (!App.Tools.includes(history_keywords,e.detail.value.keyword)) {
+    if (!App.Tools.includes(history_keywords, e.detail.value.keyword)) {
       history_keywords.unshift(e.detail.value.keyword);
     }
     // 保留10个
-    history_keywords = history_keywords.slice(0,10);
+    history_keywords = history_keywords.slice(0, 10);
     App.WxService.setStorage({
       key: "cache_history_keywords",
       data: history_keywords

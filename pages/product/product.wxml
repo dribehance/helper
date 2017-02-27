@@ -1,6 +1,6 @@
 <import src="../../wxParse/wxParse.wxml"  />
 <!-- pages/product/goods.wxml -->
-<view class="flex-item scroll-view">
+<view class="flex-item scroll-view" wx:if="{{goods}}">
   <scroll-view scroll-y="true" class="scroll-content full-height">
     <swiper indicator-dots="true" autoplay="false" interval="5000" duration="1000" class="product-swiper">
       <block wx:for="{{goods.banner}}" wx:key="{{}}">
@@ -14,13 +14,14 @@
       <view class="list-group-item">
         <view class="list-group-item-text">
           <view>{{goods.title}}</view>
-          <view class="text-primary text-big bold inline">{{goods.show_price}}元</view>
-          <view class="text-gray text-through text-small inline">{{goods.show_original_price}}元</view>
+          <text class="text-primary text-big bold inline">￥{{goods.show_price}} </text>
+          <text class="text-gray text-through text-small inline">  ￥{{goods.show_original_price}} </text>
+          <text wx:if="{{goods.norm}}"> {{goods.norm}} </text>
         </view>
         <view class="fi-b100 flex-box flex-box-center flex-box-column" catchtap="save">
-          <image src="/images/save.png" mode="aspectFit" class="icon icon-big" wx:if="{{!goods.is_save}}"></image>
-          <image src="/images/save_1.png" mode="aspectFit" class="icon icon-big" wx:if="{{goods.is_save}}"></image>
-          <view class="text-small text-lighter {{goods.is_save?'text-primary':''}}">收藏</view>
+          <image src="/images/save.png" mode="aspectFit" class="icon icon-big" wx:if="{{!goods.is_collect}}"></image>
+          <image src="/images/save_1.png" mode="aspectFit" class="icon icon-big" wx:if="{{goods.is_collect}}"></image>
+          <view class="text-small text-lighter {{goods.is_collect?'text-primary':''}}">收藏</view>
         </view>
       </view>
       <view class="list-group-item" wx:if="{{goods.selected_goods_nature.length}}">
@@ -31,8 +32,8 @@
     </view>
     <view class="list-group-item" wx:for="{{goods.nature}}" wx:key="{{}}">
       <view class="list-group-item-label">{{item.name}}</view>
-      <view class="list-group-item-text">
-        <view class="size-btn bg-default" wx:for="{{item.data}}" wx:for-item="gn" wx:key="{{}}">{{gn}}</view>
+      <view class="list-group-item-text" catchtap="selectNature" data-index="{{index}}">
+        <view class="size-btn {{item.selected == gn ?'bg-primary text-white':'bg-default'}}" wx:for="{{item.data}}" wx:for-item="gn" wx:key="{{}}" data-name="{{gn}}">{{gn}}</view>
       </view>
     </view>
     <view class="list-group-item">
@@ -61,12 +62,16 @@
   </view>
 </scroll-view>
 </view>
-<view class="product-detail-footer flex-box">
+<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
+  <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+</view>
+<view class="product-detail-footer flex-box" wx:if="{{goods}}">
 <navigator url="/pages/shoppingcart/shoppingcart" open-type="switchTab" hover-class="none"
            class="fi-b150 flex-box flex-box-center flex-box-column full-height text-center bg-default text-light">
   <image src="/images/index_4_normal.png" mode="aspectFit" class="icon icon-big"></image>
   <view class="text-small">购物车</view>
 </navigator>
-<view class="flex-item flex-box flex-box-center full-height text-white bg-info" catchtap="postToCart">加入购物车</view>
-<view class="flex-item flex-box flex-box-center full-height text-white bg-primary" catchtap="fillInOrder">立即购买</view>
+<view class="flex-item flex-box flex-box-center full-height text-white bg-primary" catchtap="postToCart" wx:if="{{goods.status == 1}}">加入购物车</view>
+<view class="flex-item flex-box flex-box-center full-height text-white bg-disabled" wx:if="{{goods.status != 1}}">加入购物车 - 无货</view>
+<!--<view class="flex-item flex-box flex-box-center full-height text-white bg-primary" catchtap="fillInOrder">立即购买</view>-->
 </view>

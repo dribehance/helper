@@ -6,15 +6,11 @@ Page({
   },
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
-    if (options.redirect) {
-      this.setData({
-        redirect: true
-      });
-    }
+    this.setData(options);
     this.getAddress();
   },
   getAddress: function () {
-    App.HttpService.getAddress({ id: 1 }).then(function (data) {
+    App.HttpService.getAddress({ id: 1 }).then(data => {
       data.AddressesResponse.addresses.map(function (g) {
         g.touchstartData = {};
         g.touchmoveData = {};
@@ -23,7 +19,9 @@ Page({
         g.check = true;
       })
       this.setData(data.AddressesResponse);
-    }.bind(this))
+    }, error => {
+      this.setData(error)
+    })
   },
   postAddress: function () { },
   deleteAddress: function (e) {
@@ -47,14 +45,27 @@ Page({
   check: function (e) {
     var current_index = e.currentTarget.dataset.index,
       addresses = this.data.addresses;
-    App.WxService.setStorage({
-      key: "cache_address",
-      data: addresses[current_index]
-    });
-    App.WxService.navigateBack();
+    if (this.data.from) {
+      App.WxService.setStorage({
+        key: "cache_address",
+        data: addresses[current_index]
+      });
+      App.WxService.navigateBack();
+    }
   },
-  setDefault: function () {
-
+  setDefault: function (e) {
+    App.HttpService.setDefaultAddress({
+      address_id: e.currentTarget.dataset.id
+    }).then(data => {
+      setTimeout(() => {
+        App.WxService.showToast({
+          title: data.SetAddressDefaultResponse.message,
+          icon: "success",
+          duration: 2000
+        });
+      }, 1000);
+      this.getAddress();
+    })
   },
   edit: function (e) {
     var current_index = e.currentTarget.dataset.index,
@@ -63,7 +74,7 @@ Page({
       key: "cache_address",
       data: addresses[current_index]
     });
-    App.WxService.navigateTo("/pages/me/address/create_address/create_address?type=edit&address_id="+addresses[current_index].id);
+    App.WxService.navigateTo("/pages/me/address/create_address/create_address?type=edit&address_id=" + addresses[current_index].id);
   },
   translateX: function (index, x) {
     var animation = wx.createAnimation({
@@ -141,12 +152,12 @@ Page({
   onShow: function () {
     // 页面显示
     App.WxService.getStorage({
-      key:"info"
-    }).then(function(response){
+      key: "info"
+    }).then(function (response) {
       if (response.data == "addressUpdate") {
         this.getAddress();
+        App.WxService.removeStorageSync("info");
       }
-      App.WxService.removeStorageSync("info");
     }.bind(this))
   },
   onHide: function () {

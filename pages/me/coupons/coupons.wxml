@@ -3,8 +3,8 @@
     <!-- coupons list -->
     <view class="justified-cell jc-1of2 coupon" wx:for="{{vanchers}}" wx:key="{{vancher_id}}" data-id="{{item.vancher_id}}" catchtap="selectCoupon">
         <view class="coupon-header">
-            <view class="inline text-big price bold">{{item.price}}</view>
-            <view class="inline text-small">{{item.min_price}}</view>
+            <view class="inline text-big price bold coupon-header-text">{{item.price}}元</view>
+            <view class="inline text-small coupon-header-text">{{item.min_price}}</view>
             <view class="flex-box flex-box-between">
                 <view class="text-light text-small bold">{{item.status_info}}</view>
                 <view class="text-light text-small bold">{{item.date_info}}</view>
@@ -17,6 +17,6 @@
 <view class="flex-item flex-box flex-box-center" wx:if="{{vanchers.length==0}}">
   <image src="/images/coupons_blank.png" mode="aspectFit" class="icon icon-blank"></image>
 </view>
-<view class="flex-item flex-box flex-box-center" wx:if="{{!vanchers}}">
+<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
   <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
 </view>

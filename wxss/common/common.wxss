@@ -21,6 +21,7 @@ view {
   line-height: 1.5;
   vertical-align: middle;
   box-sizing: border-box;
+  color: #2f2f2f;
 }
 button::after {
   border:none;

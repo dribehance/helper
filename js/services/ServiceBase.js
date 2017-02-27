@@ -100,13 +100,13 @@ class ServiceBase {
         promise = chainInterceptors(promise, requestInterceptors)
 
         // 发起HTTPS请求
-        promise = promise.then(this.__http)
+        promise = promise.then(this.__http);
 
         // 注入响应拦截器
         promise = chainInterceptors(promise, responseInterceptors)
 
         // 接口调用成功，res = {data: '开发者服务器返回的内容'}
-        promise = promise.then(res => res.data, err => err)
+        promise = promise.then(res => res.data, this.__reject);
 
         return promise
     }
@@ -178,36 +178,44 @@ class ServiceBase {
                 return request
             },
             requestError: (requestError) => {
-                wx.hideToast()
-                return requestError
+                wx.hideToast();
+                return new es6.Promise((resolve, reject) => reject(requestError));
             },
             response: (response) => {
                 return new es6.Promise((resolve, reject) => {
-                    wx.hideToast();
+                    var error = {}, errorList = [];
                     response.responseTimestamp = new Date().getTime();
-                    if (response.statusCode === 401) {
-                        wx.removeStorageSync('token')
-                        wx.redirectTo({
-                            url: '/pages/login/index'
-                        })
+                    // server not response
+                    if (response.statusCode != 200) {
+                        error.errorCode = response.statusCode;
+                        error.errorMessage = "数据加载出错，请稍后再试";
+                        errorList.push(error);
                     }
-                    if (typeof response.data == "string") {
+                    // server response empty data
+                    if (!response.data) {
+                        error.errorCode = 404;
+                        error.errorMessage = "数据加载出错，请稍后再试";
+                        errorList.push(error);
+                    }
+                    // server response data not json
+                    if (response.data && typeof response.data == "string") {
                         var data = response.data
                             .replace(/\n+/g, "")
                             .replace(/\t+/g, "")
                         response.data = JSON.parse(data);
                     }
-                    // data invalid
-                    if (!response.data) {
+                    // reject or resolve
+                    wx.hideToast();
+                    if (errorList.length > 0) {
                         wx.showModal({
                             title: '友情提示',
-                            content: '数据加载出错，请稍后再试',
+                            content: errorList[0].errorMessage,
                             showCancel: !1,
                             success: function () {
                                 wx.navigateBack();
                             }
                         });
-                        reject("No response");
+                        reject(errorList[0]);
                     }
                     else {
                         resolve(response);
@@ -215,8 +223,22 @@ class ServiceBase {
                 });
             },
             responseError: (responseError) => {
-                wx.hideToast();
-                return responseError;
+                // "request:fail"
+                return new es6.Promise((resolve, reject) => {
+                    wx.hideToast();
+                    wx.showModal({
+                        title: '友情提示',
+                        content: "服务器繁忙，稍后再试",
+                        showCancel: !1,
+                        success: function () {
+                            wx.navigateBack();
+                        }
+                    });
+                    reject({
+                        errorCode: 500,
+                        errorMessage: "服务器繁忙，稍后再试"
+                    })
+                });
             },
         }].concat(interceptors)
     }

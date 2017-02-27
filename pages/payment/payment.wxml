@@ -1,26 +1,27 @@
 <!-- pages/payment/payment.wxml -->
 <form bindsubmit="formSubmit" bindreset="formReset">
 <view class="list-group">
-    <navigator url="/pages/me/address/address?redirect" class="list-group-item">
+    <navigator url="/pages/me/address/address?from=payment" class="list-group-item">
         <image class="list-group-item-image" mode="aspectFill" src="/images/location.png"></image>
         <view class="list-group-item-text flex-box flex-box-column" wx:if="{{address}}">
-            <view class="bold text-big">{{address.name}} {{address.telephone}}</view>
-            <view>{{address.province+address.city+address.area+address.street}}</view>
+            <view class="text-large">{{address.name}} {{address.telephone}}</view>
+            <view class="bold text-light">{{address.province+address.city+address.area+address.street}}</view>
         </view>
         <view class="list-group-item-text flex-box flex-box-column" wx:if="{{!address}}">
             <view>请选择地址</view>
         </view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
     </navigator>
+    <image src="/images/stamp_line.jpg" class="stamp-line" mode="aspectFill"></image>
 </view>
 <view class="flex-box flex-box-center product-item" wx:for="{{goods}}" wx:key="{{}}">
     <view class="fi-1of4 full-height">
-        <image src="{{item.cover}}" mode="aspectFit" class="full-width full-height" binderror="onImageLoadError" data-error-ref="goods[{{index}}].cover" data-error-url="/images/default.png"></image>
+        <image src="{{item.cover}}" mode="aspectFill" class="full-width full-height" binderror="onImageLoadError" data-error-ref="goods[{{index}}].cover" data-error-url="/images/default.png"></image>
     </view>
     <view class="flex-item product-content">
         <view class="product-name">{{item.title}}</view>
-        <view class="text-primary bold inline text-big">x{{item.amount}} {{item.show_price}}元 </view>
-        <view class="text-primary text-small inline text-through"> {{item.show_original_price}}元</view>
+        <view class="text-primary bold inline text-big">x{{item.amount}}  ￥{{item.show_price}}</view>
+        <!--<view class="text-primary text-small inline text-through"> {{item.show_original_price}}元</view>-->
     </view>
 </view>
 <view style="height:24rpx"></view>
@@ -34,14 +35,14 @@
         <view wx:if="{{fapiao.type=='detail'}}">{{fapiao.name}}</view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
     </navigator>
-    <navigator url="/pages/me/coupons/coupons?from=payment" class="list-group-item">
+    <view catchtap="getAvailableCoupons" class="list-group-item">
         <view class="list-group-item-text">
             <view>优惠券</view>
         </view>
         <view wx:if="{{!coupon}}">选择优惠券</view>
-        <view wx:if="{{coupon}}">{{coupon.price}}元</view>
+        <view wx:if="{{coupon}}">{{coupon.min_price}}</view>
         <image src="/images/arrow_right.png" mode="aspectFit" class="icon"></image>
-    </navigator>
+    </view>
 </view>
 <view class="list-group">
     <view class="list-group-item">
@@ -63,22 +64,25 @@
         <view class="list-group-item-text">
             优惠券
         </view>
-        <navigator url="/pages/me/coupons/coupons?from=payment" class="text-primary">
-            <text wx:if="{{coupon}}">{{coupon.price}}元</text>
+        <view class="text-primary">
+            <text wx:if="{{coupon}}">-{{coupon.price}}元</text>
             <text wx:if="{{!coupon}}">0</text>
-        </navigator>
+        </view>
     </view>
     <view class="list-group-item">
         <view class="list-group-item-text">
             运费
         </view>
-        <view class="text-primary">
-            {{traffic_cost}}元
+        <view class="text-primary" wx:if="{{traffic_cost}}">
+            +{{traffic_cost}}元
+        </view>
+        <view class="text-primary" wx:if="{{!traffic_cost}}">
+            包邮
         </view>
     </view>
 </view>
 <view style="height:110px"></view>
-<button class="payment-footer flex-box flex-box-center" formType="submit" style="border-radius:0">
+<button class="payment-footer flex-box flex-box-center" disabled="{{disabled}}" formType="submit" style="border-radius:0">
      微信支付
 </button>
 </form>

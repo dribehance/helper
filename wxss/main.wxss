@@ -23,10 +23,12 @@
   display: block;
   padding: 15rpx;
   height:110rpx;
-  color:#66cccc;
 }
 .coupon-header .price {
   margin-right: 15rpx;
+}
+.coupon-header-text {
+  color:#66cccc;
 }
 .coupon .coupon-footer {
   padding: 15rpx;
@@ -60,6 +62,9 @@
   overflow: hidden;
 }
 /*列表页 产品列表*/
+.product-list-image {
+  padding: 10rpx;
+}
 .product-item {
   height: 190rpx;
   background-color: white;
@@ -184,17 +189,21 @@
   color: #ff5252;
   border-bottom: 2rpx solid #ff5252;
 }
+.search-form {
+  padding: 8rpx 16rpx;
+}
 .search-input {
   width: 100%;
-  height: 80rpx;
+  height: 70rpx;
   padding-left: 24rpx;
   background-color: #f1f1f1;
-  border-radius: 80rpx;
+  border-radius: 70rpx;
 }
 .search-btn {
-  height: 80rpx;
-  line-height: 80rpx !important;
-  border-radius: 80rpx;
+  height: 70rpx;
+  line-height: 70rpx !important;
+  border-radius: 70rpx;
+  background-color: #f1f1f1;
 }
 /*shoppingcart*/
 .shoppingcart-swipe-wrap {
@@ -223,7 +232,7 @@
 .shoppingcart-footer {
   height: 90rpx;
   background-color: white;
-  position: fixed;
+  /*position: fixed;*/
   left: 0;
   right:0;
   bottom: 0;
@@ -233,8 +242,8 @@
 
 /*个人中心*/
 .avatar {
-  height: 200rpx;
-  width: 200rpx;
+  height: 100rpx;
+  width: 100rpx;
   border-radius: 100%;
   overflow: hidden;
 }
@@ -258,6 +267,12 @@
   color: #ff5252;
   border-top: 1rpx solid #d5d5d5;
   background-color: white;
+}
+.stamp-line {
+  display: block;
+  height: 10rpx;
+  width: 100%;
+  border-bottom: 1rpx solid #d5d5d5;
 }
 .list-group-item-wrap {
   position: relative;
