@@ -22,16 +22,20 @@ Page({
       content: '是否取消订单',
       showCancel: 1,
     }).then(response => {
-      App.HttpService.cancelOrder({
-        group_id: this.data.group_id
-      }).then(data => {
-        return App.WxService.setStorage({
-          key: "info",
-          data: "orderChange"
+      if (response.confirm) {
+        App.HttpService.cancelOrder({
+          group_id: this.data.group_id
+        }).then(data => {
+          return App.WxService.setStorage({
+            key: "info",
+            data: "orderUpdate"
+          })
+        }).then(response => {
+          App.WxService.navigateBack();
         })
-      }).then(response => {
-        App.WxService.navigateBack();
-      })
+      }
+    }, error => {
+      console.log(error)
     });
   },
   payOrder: function (e) {
@@ -59,7 +63,7 @@ Page({
         }).then(() => {
           return App.WxService.setStorage({
             key: "info",
-            data: "orderChange"
+            data: "orderUpdate"
           })
         }).then(response => {
           App.WxService.navigateBack();

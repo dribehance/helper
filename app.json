@@ -72,5 +72,5 @@
     "uploadFile": 10000,
     "connectSocket": 10000
   },
-  "debug": true
+  "debug": false
 }

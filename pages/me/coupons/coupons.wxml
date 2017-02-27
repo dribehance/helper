@@ -1,22 +1,27 @@
 <!-- pages/me/coupons/coupons.wxml -->
-<view class="justified section">
-    <!-- coupons list -->
-    <view class="justified-cell jc-1of2 coupon" wx:for="{{vanchers}}" wx:key="{{vancher_id}}" data-id="{{item.vancher_id}}" catchtap="selectCoupon">
-        <view class="coupon-header">
-            <view class="inline text-big price bold coupon-header-text">{{item.price}}元</view>
-            <view class="inline text-small coupon-header-text">{{item.min_price}}</view>
-            <view class="flex-box flex-box-between">
-                <view class="text-light text-small bold">{{item.status_info}}</view>
-                <view class="text-light text-small bold">{{item.date_info}}</view>
+<view class="flex-item scroll-view">
+    <scroll-view scroll-y="true" class="scroll-content">
+        <view class="justified section">
+            <!-- coupons list -->
+            <view class="justified-cell jc-1of2 coupon" wx:for="{{vanchers}}" wx:key="{{vancher_id}}"
+                  data-id="{{item.vancher_id}}" catchtap="selectCoupon">
+                <view class="coupon-header">
+                    <view class="inline text-big price bold coupon-header-text">{{item.price}}元</view>
+                    <view class="inline text-small coupon-header-text">{{item.min_price}}</view>
+                    <view class="flex-box flex-box-between">
+                        <view class="text-light text-small bold">{{item.status_info}}</view>
+                        <view class="text-light text-small bold">{{item.date_info}}</view>
+                    </view>
+                </view>
+                <view class="coupon-footer text-overflow">{{item.catalog_info}}</view>
             </view>
+            <!-- coupons list end -->
         </view>
-        <view class="coupon-footer text-overflow">{{item.catalog_info}}</view>
-    </view>
-    <!-- coupons list end -->
-</view>
-<view class="flex-item flex-box flex-box-center" wx:if="{{vanchers.length==0}}">
-  <image src="/images/coupons_blank.png" mode="aspectFit" class="icon icon-blank"></image>
-</view>
-<view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
-  <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+        <view class="flex-item flex-box flex-box-center" wx:if="{{vanchers.length==0}}">
+            <image src="/images/coupons_blank.png" mode="aspectFit" class="icon icon-blank"></image>
+        </view>
+        <view class="flex-item flex-box flex-box-center" wx:if="{{errorCode}}">
+            <image src="/images/error.png" mode="aspectFit" class="icon icon-error"></image>
+        </view>
+    </scroll-view>
 </view>
