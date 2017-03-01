@@ -40,6 +40,7 @@ Page({
       this.setData({
         addresses: addresses
       });
+      App.WxService.removeStorageSync("cache_address");
     }.bind(this))
   },
   check: function (e) {

@@ -64,9 +64,7 @@ Page({
     App.getUserInfo().then(data => {
       this.getIndex();
     },error => {
-      if (error.errMsg == "getUserInfo:fail auth deny") {
-        this.getIndex();
-      }
+      this.getIndex();
     });
   },
   onImageLoadError: function (e) {

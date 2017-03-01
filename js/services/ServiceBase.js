@@ -95,7 +95,7 @@ class ServiceBase {
                 responseInterceptors.push(n.response, n.responseError)
             }
         })
-
+        
         // 注入请求拦截器
         promise = chainInterceptors(promise, requestInterceptors)
 
@@ -162,85 +162,7 @@ class ServiceBase {
      * 设置request拦截器
      */
     setInterceptors(interceptors) {
-        return [{
-            request: (request) => {
-                request.header = request.header || {}
-                request.requestTimestamp = new Date().getTime()
-                if (request.url.indexOf('/api') !== -1 && wx.getStorageSync('token')) {
-                    request.header.Authorization = 'Bearer ' + wx.getStorageSync('token')
-                }
-                wx.showToast({
-                    title: '加载中',
-                    icon: 'loading',
-                    duration: 10000,
-                    mask: !0,
-                })
-                return request
-            },
-            requestError: (requestError) => {
-                wx.hideToast();
-                return new es6.Promise((resolve, reject) => reject(requestError));
-            },
-            response: (response) => {
-                return new es6.Promise((resolve, reject) => {
-                    var error = {}, errorList = [];
-                    response.responseTimestamp = new Date().getTime();
-                    // server not response
-                    if (response.statusCode != 200) {
-                        error.errorCode = response.statusCode;
-                        error.errorMessage = "数据加载出错，请稍后再试";
-                        errorList.push(error);
-                    }
-                    // server response empty data
-                    if (!response.data) {
-                        error.errorCode = 404;
-                        error.errorMessage = "数据加载出错，请稍后再试";
-                        errorList.push(error);
-                    }
-                    // server response data not json
-                    if (response.data && typeof response.data == "string") {
-                        var data = response.data
-                            .replace(/\n+/g, "")
-                            .replace(/\t+/g, "")
-                        response.data = JSON.parse(data);
-                    }
-                    // reject or resolve
-                    wx.hideToast();
-                    if (errorList.length > 0) {
-                        wx.showModal({
-                            title: '友情提示',
-                            content: errorList[0].errorMessage,
-                            showCancel: !1,
-                            success: function () {
-                                wx.navigateBack();
-                            }
-                        });
-                        reject(errorList[0]);
-                    }
-                    else {
-                        resolve(response);
-                    }
-                });
-            },
-            responseError: (responseError) => {
-                // "request:fail"
-                return new es6.Promise((resolve, reject) => {
-                    wx.hideToast();
-                    wx.showModal({
-                        title: '友情提示',
-                        content: "服务器繁忙，稍后再试",
-                        showCancel: !1,
-                        success: function () {
-                            wx.navigateBack();
-                        }
-                    });
-                    reject({
-                        errorCode: 500,
-                        errorMessage: "服务器繁忙，稍后再试"
-                    })
-                });
-            },
-        }].concat(interceptors)
+        return interceptors;
     }
 }
 
